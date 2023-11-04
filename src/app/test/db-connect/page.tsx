@@ -1,8 +1,7 @@
-import { db } from "@/MongoConnect";
+import { userCollection } from "@/lib/MongoConnect";
 
 export default async function H() {
-  const col = db.collection("Users");
-  const res = await col.find().toArray();
+  const res = await userCollection.find().toArray();
 
   return <p>Users: {JSON.stringify(res)}</p>;
 }
