@@ -25,3 +25,13 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+/* remove the input focus blue box, it will be in the wrong place. */
+#searchInput:focus {
+  outline: none;
+}
+/* Add the focus effect to the form so it contains the button */
+#searchBar:focus-within { 
+  outline: 3px solid #2adbc4 
+}

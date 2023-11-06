@@ -7,8 +7,6 @@ export default function ProfileButton() {
   if (session) {
     return (
       <div>
-        {session.user?.name}
-        <br />
         <button onClick={() => signOut()} className="hover:underline">
           Sign out
         </button>
@@ -18,10 +16,9 @@ export default function ProfileButton() {
 
   return (
     <div>
-      Guest
-      <br />
+     
       <button onClick={() => signIn()} className="hover:underline">
-        Sign in
+      Sign in
       </button>
     </div>
   );
