@@ -33,6 +33,6 @@ main {
   outline: none;
 }
 /* Add the focus effect to the form so it contains the button */
-#searchBar:focus-within { 
-  outline: 4px solid #b9b9b994 
+#searchBar:focus-within {
+  outline: 4px solid #b9b9b994;
 }
