@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <div>
+    <main>
       <h1>About Us</h1>
       <Image
         src="/vercel.svg"
@@ -13,6 +13,6 @@ export default function About() {
         priority
       />
       <p>Lorem Ipsum</p>
-    </div>
+    </main>
   );
 }

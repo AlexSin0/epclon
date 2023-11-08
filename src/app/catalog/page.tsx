@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Catalog() {
   return (
-    <div>
+    <main>
       <h1>Lorem</h1>
       <Image
         src="/vercel.svg"
@@ -13,6 +13,6 @@ export default function Catalog() {
         priority
       />
       <p>Lorem Ipsum</p>
-    </div>
+    </main>
   );
 }
