@@ -69,7 +69,7 @@ export default async function RootLayout({
               </button>
             </form>
           </nav>
-
+          {/* Content */}
           {children}
           {/* Footer */}
           <nav className="bg-[#303a50] font-arial p-2 items-center text-lg">
