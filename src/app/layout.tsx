@@ -56,7 +56,7 @@ export default async function RootLayout({
             >
               <input
                 id="searchInput"
-                className="rounded-full pl-2 "
+                className="rounded-full pl-2 text-black"
                 type="text"
                 placeholder="Search"
               />
