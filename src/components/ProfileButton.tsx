@@ -7,19 +7,14 @@ export default function ProfileButton() {
   if (session) {
     return (
       <div>
-        <button onClick={() => signOut()} className="hover:underline">
-          Sign out
-        </button>
+        <button onClick={() => signOut()}>Sign out</button>
       </div>
     );
   }
 
   return (
     <div>
-     
-      <button onClick={() => signIn()} className="hover:underline">
-      Sign in
-      </button>
+      <button onClick={() => signIn()}>Sign in</button>
     </div>
   );
 }
