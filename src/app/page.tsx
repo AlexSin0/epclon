@@ -3,7 +3,6 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[url('/background.jpg')] bg-fixed text-black">
-      
       <div className="">
         <div
           id="carouselExampleCaptions"
@@ -146,9 +145,15 @@ export default function Home() {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4 m-2 p-2">
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[500px] h-[500px]">01</div>
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[500px] h-[500px]">02</div>
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[500px] h-[500px]">03</div>
+        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
+          01
+        </div>
+        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
+          02
+        </div>
+        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
+          03
+        </div>
       </div>
     </main>
   );
