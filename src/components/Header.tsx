@@ -31,8 +31,10 @@ export default function Header() {
             </Link>
           </li>
         </ul>
+        <div className="flex items-center justify-between">
         <SearchBar />
         <ProfileButton />
+        </div>
       </div>
     </nav>
   );
