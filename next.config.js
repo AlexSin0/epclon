@@ -8,8 +8,6 @@ const nextConfig = {
                 port: '',
                 pathname: '/u/**',
             },
-        ],
-        remotePatterns: [
             {
                 protocol: 'https',
                 hostname: 'lh3.googleusercontent.com',

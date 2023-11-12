@@ -45,12 +45,10 @@ export default function ProfileButton() {
         width={50}
         height={50}
         onClick={() => setClickState(!clickState)}
-      />
-      {clickState ? (
-        // TODO: Refactor
-        <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      {clickState && (
+        <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
           <p className="block px-4 py-2 text-sm text-gray-700">
-            {session!.user?.name}
+            {session.user?.name}
           </p>
           <hr/>
           <button
@@ -67,8 +65,6 @@ export default function ProfileButton() {
             Your Profile
           </Link>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );
