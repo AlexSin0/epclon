@@ -3,7 +3,8 @@ import "./globals.css";
 
 import SessionProvider from "@/components/SessionProvider";
 import { getServerSession } from "next-auth";
-import ProfileButton from "@/components/ProfileButton";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +19,9 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <div className="bg-green-600">
-            <ProfileButton />
-          </div>
+          <Header />
           {children}
+          <Footer />
         </SessionProvider>
       </body>
     </html>
