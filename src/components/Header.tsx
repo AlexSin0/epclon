@@ -13,10 +13,9 @@ export default function Header() {
               <Image
                 src="/logo.jpg"
                 alt="Epclon Logo"
-                className="dark:invert border-solid rounded-full hower:w-[60px]"
+                className="rounded-full"
                 width={50}
                 height={50}
-                priority
               />
             </Link>
           </li>
