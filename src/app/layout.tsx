@@ -22,10 +22,53 @@ export default async function RootLayout({
       <body className={inter.className}>
         <SessionProvider session={session}>
           {/* Header */}
-          <nav className="bg-[#303a50] flex font-arial p-2 items-center justify-between text-lg">
-            <ul className="text-white flex items-center">
-              <li className="">
-                <Link className="" href="/">
+          <nav className="bg-[#303a50]">
+            <div className="flex font-arial items-center justify-between text-lg">
+              <ul className="text-white flex items-center">
+                <li className="px-3 py-2">
+                  <Link href="/">
+                    <Image
+                      src="/logo.jpg"
+                      alt="Epclon Logo"
+                      className="dark:invert border-solid rounded-full hower:w-[60px]"
+                      width={50}
+                      height={50}
+                      priority
+                    />
+                  </Link>
+                </li>
+                <li className="text-gray-300 hover:bg-[#475c85] hover:text-white rounded-md px-3 py-2 font-medium">
+                  <Link className="" href="/cart">
+                    Cart
+                  </Link>
+                </li>
+                <li className="text-gray-300 hover:bg-[#475c85] hover:text-white rounded-md px-3 py-2 font-medium">
+                  <Link className="" href="/catalog">
+                    Catalog
+                  </Link>
+                </li>
+              </ul>
+              <div className="flex justify-between px-3 py-2">
+                <form
+                  id="searchBar"
+                  className=" p-0.5 bg-white border-solid rounded-full h-11 flex justify-between"
+                >
+                  <input
+                    id="searchInput"
+                    className="rounded-full pl-2 text-black"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <button
+                    id="searchButton"
+                    className="bg-[#21ad9a] float-right w-10 h-10 rounded-full text-white"
+                    type="button"
+                  >
+                    Go
+                  </button>
+                </form>
+                <button className="pl-6">
+                  {" "}
                   <Image
                     src="/logo.jpg"
                     alt="Epclon Logo"
@@ -34,41 +77,35 @@ export default async function RootLayout({
                     height={50}
                     priority
                   />
-                </Link>
-              </li>
-              <li className="text-gray-300 hover:bg-[#475c85] hover:text-white rounded-md px-3 py-2 font-medium">
-                <ProfileButton />
-              </li>
-              <li className="text-gray-300 hover:bg-[#475c85] hover:text-white rounded-md px-3 py-2 font-medium">
-                <Link className="" href="/cart">
-                  Cart
-                </Link>
-              </li>
-              <li className="text-gray-300 hover:bg-[#475c85] hover:text-white rounded-md px-3 py-2 font-medium">
-                <Link className="" href="/catalog">
-                  Catalog
-                </Link>
-              </li>
-            </ul>
-            <form
-              id="searchBar"
-              className=" p-0.5 bg-white border-solid rounded-full h-11 flex justify-between"
+                </button>
+              </div>
+            </div>
+            <div
+              id="user-menu"
+              className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
-              <input
-                id="searchInput"
-                className="rounded-full pl-2 text-black"
-                type="text"
-                placeholder="Search"
-              />
-              <button
-                id="searchButton"
-                className="bg-[#21ad9a] float-right w-10 h-10 rounded-full text-white"
-                type="button"
+              <div className="block px-4 py-2 text-sm text-gray-700">
+                <ProfileButton />
+              </div>
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700"
+                role="menuitem"
+                id="user-menu-item-0"
               >
-                Go
-              </button>
-            </form>
+                Your Profile
+              </a>
+              <a
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700"
+                role="menuitem"
+                id="user-menu-item-1"
+              >
+                Settings
+              </a>
+            </div>
           </nav>
+
           {/* Content */}
           {children}
           {/* Footer */}

@@ -7,6 +7,8 @@ export default function ProfileButton() {
   if (session) {
     return (
       <div>
+        <p>{session.user?.name}</p>
+        <hr/>
         <button onClick={() => signOut()}>Sign out</button>
       </div>
     );
@@ -14,6 +16,8 @@ export default function ProfileButton() {
 
   return (
     <div>
+      <p>Guest</p>
+      <hr/>
       <button onClick={() => signIn()}>Sign in</button>
     </div>
   );
