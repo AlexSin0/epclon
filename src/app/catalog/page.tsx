@@ -13,6 +13,11 @@ export default function Catalog() {
         priority
       />
       <p>Lorem Ipsum</p>
+      <div className="grid grid-cols-3 gap-4 m-2 p-2">
+        <div className="bg-white w-[500px] h-[500px]">01</div>
+        <div className="bg-white w-[500px] h-[500px]">02</div>
+        <div className="bg-white w-[500px] h-[500px]">03</div>
+      </div>
     </main>
   );
 }
