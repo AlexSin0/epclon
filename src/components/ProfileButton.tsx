@@ -9,42 +9,38 @@ export default function ProfileButton() {
 
   const [clickState, setClickState] = useState<boolean>();
 
-  const menuPanel = session ? (
-    <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
-      <p className="block px-4 py-2 text-sm text-gray-700">
-        {session.user?.name}
-      </p>
-      <hr />
-      <button
-        className="block px-4 py-2 text-sm text-gray-700"
-        onClick={() => signOut()}
-      >
-        Sign out
-      </button>
+  const entryStyle = "block px-4 py-2 text-sm text-gray-700";
 
-      <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700">
-        Your Profile
-      </Link>
-    </div>
-  ) : (
-    <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-      <p className="block px-4 py-2 text-sm text-gray-700">Guest</p>
+  const menuPanel = (
+    <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+      <span className={entryStyle}>{session?.user?.name ?? "Guest"}</span>
       <hr />
-      <button
-        className="block px-4 py-2 text-sm text-gray-700"
-        onClick={() => signIn()}
-      >
-        Sign in
-      </button>
+      {session ? (
+        <>
+          <button className={entryStyle} onClick={() => signOut()}>
+            Sign out
+          </button>
+
+          <Link className={entryStyle} href="/profile">
+            Your Profile
+          </Link>
+        </>
+      ) : (
+        <>
+          <button className={entryStyle} onClick={() => signIn()}>
+            Sign in
+          </button>
+        </>
+      )}
     </div>
   );
 
   return (
     <div>
       <Image
-        src={session?.user?.image ?? "/logo.jpg"}
+        src={session?.user?.image ?? "/placeholder.jpg"}
         alt="User profile icon"
-        className="rounded-full"
+        className="rounded-full m-3 hover:cursor-pointer"
         width={50}
         height={50}
         onClick={() => setClickState(!clickState)}
