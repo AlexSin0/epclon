@@ -1,14 +1,14 @@
 import { ShopItem } from "@/types/ShopItem";
 
 export function TestData(): ShopItem[] {
-  const testItem = new ShopItem("Test Name", 100, "cpu", {
-    color: "none",
-    brand: "intel",
+  const testItem = new ShopItem("Test Name", 100, "CPU", {
+    color: "None",
+    brand: "Intel",
   });
 
-  const testItem2 = new ShopItem("Test Name", 100, "cpu", {
-    color: "black",
-    brand: "amd",
+  const testItem2 = new ShopItem("Test Name", 100, "CPU", {
+    color: "Black",
+    brand: "AMD",
   });
 
   const shopItems: ShopItem[] = [];

@@ -1,12 +1,12 @@
 import { ItemProps } from "./ItemProps";
 
 export type ItemType =
-  | "cpu"
-  | "gpu"
-  | "motherboard"
-  | "ram"
-  | "hard-drive"
-  | "psu";
+  | "CPU"
+  | "GPU"
+  | "Motherboard"
+  | "RAM"
+  | "Hard Drive"
+  | "PSU";
 
 export class ShopItem {
   constructor(
