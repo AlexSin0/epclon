@@ -5,12 +5,12 @@ import { shopItemCollection } from "@/lib/MongoConnect";
 import { WithId, Filter, Document } from "mongodb";
 
 export async function TestData(): Promise<ShopItem[]> {
-  const testItem = new ShopItem("Test Name", 100, "CPU", {
+  const testItem = new ShopItem("Test Name1", 100, "CPU", {
     color: "None",
     brand: "Intel",
   });
 
-  const testItem2 = new ShopItem("Test Name", 100, "CPU", {
+  const testItem2 = new ShopItem("Test Name2", 100, "CPU", {
     color: "Black",
     brand: "AMD",
   });
@@ -28,7 +28,7 @@ export async function TestData(): Promise<ShopItem[]> {
 
   const shopItems: ShopItem[] = [];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     shopItems.push(testItem);
   }
 
