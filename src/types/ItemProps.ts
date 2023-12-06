@@ -1,5 +1,5 @@
 export class ItemProps {
-  public color?:
+  public Color?:
     | "None"
     | "Black"
     | "White"
@@ -8,7 +8,7 @@ export class ItemProps {
     | "Red"
     | "Blue"
     | "Yellow";
-  public brand?: "Intel" | "AMD" | "Asus" | "MSI" | "Adata" | "Corsair";
+  public Brand?: "Intel" | "AMD" | "Asus" | "MSI" | "Adata" | "Corsair";
 }
 
 export type Socket = "LGA 1151" | "LGA 1155" | "AM5" | "AM4";
