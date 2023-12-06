@@ -40,35 +40,44 @@ export async function TestData(): Promise<ShopItem[]> {
   return shopItems;
 }
 
+export function GetFilterProps(filterName: string) {
+  return shopItemCollection.distinct(`props.${filterName}`);
+}
+
+export function GetAllFilterProps(filterNames: string[]) {
+  return Promise.all(
+    filterNames.map((filterName) => GetFilterProps(filterName))
+  );
+}
+
 export async function GetCatalogFull(): Promise<WithId<ShopItem>[]> {
   const query = await shopItemCollection.find().toArray();
   return query as WithId<ShopItem>[];
 }
 
-export async function GetCatalogFiltered(
-  searchParams: Map<string, string | string[]>
-) {
-  const mongoFilter = ToMongoFilter(searchParams);
-  const query = await shopItemCollection.find(mongoFilter);
+export type SearchParams = { [key: string]: string | string[] | undefined };
 
+export async function GetCatalogFiltered(searchParams: SearchParams) {
+  const mongoFilter = ToMongoFilter(searchParams);
+
+  const query = await shopItemCollection.find(mongoFilter);
   const array = await query.toArray();
 
   return array as WithId<ShopItem>[];
 }
 
-function ToMongoFilter(searchParams: Map<string, string | string[]>) {
+function ToMongoFilter(searchParams: SearchParams) {
   const mongoFilter: Filter<Document> = {};
 
-  //Is not instance of Map!!!
-  console.log(searchParams instanceof Map);
+  for (const key in searchParams) {
+    const val = searchParams[key];
 
-  searchParams.forEach((v, k) => {
-    if (Array.isArray(v)) {
-      mongoFilter[`props.${k}`] = { $in: v };
+    if (Array.isArray(val)) {
+      mongoFilter[`props.${key}`] = { $in: val };
     } else {
-      mongoFilter[`props.${k}`] = v;
+      mongoFilter[`props.${key}`] = val;
     }
-  });
+  }
 
   return mongoFilter;
 }
