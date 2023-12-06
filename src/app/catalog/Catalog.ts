@@ -1,19 +1,19 @@
 import { ShopItem } from "@/types/ShopItem";
 
 export function TestData(): ShopItem[] {
-  const testItem = new ShopItem("Test Name", 100, "CPU", {
-    color: "None",
-    brand: "Intel",
+  const testItem = new ShopItem("Test Name1", 100, "CPU", {
+    Color: "None",
+    Brand: "Intel",
   });
 
-  const testItem2 = new ShopItem("Test Name", 100, "CPU", {
-    color: "Black",
-    brand: "AMD",
+  const testItem2 = new ShopItem("Test Name2", 100, "CPU", {
+    Color: "Black",
+    Brand: "AMD",
   });
 
   const shopItems: ShopItem[] = [];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     shopItems.push(testItem);
   }
 
