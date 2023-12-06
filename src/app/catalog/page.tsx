@@ -1,9 +1,14 @@
 import CatalogItem from "@/components/CatalogItem";
 import FilterGroup from "@/components/FilterGroup";
-import { TestData } from "./Catalog";
+import { GetCatalogFiltered, GetCatalogFull, TestData } from "./Catalog";
 
-export default function Catalog() {
-  const shopItems = TestData();
+export default async function Catalog({
+  searchParams,
+}: {
+  searchParams: Map<string, string | string[]>;
+}) {
+  const shopItems = await GetCatalogFull();
+  const catalog = await GetCatalogFiltered(searchParams);
   const filterNames = ["color", "brand"];
 
   return (
@@ -34,7 +39,7 @@ export default function Catalog() {
         </form>
       </div>
       <div className="ml-[20%] p-4 grid grid-cols-4 gap-4">
-        {shopItems.map((item) => (
+        {catalog.map((item) => (
           <CatalogItem item={item} />
         ))}
       </div>
