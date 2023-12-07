@@ -2,7 +2,7 @@ import { CpuProps } from "@/types/ItemProps";
 import { ShopItem } from "@/types/ShopItem";
 
 import { shopItemCollection } from "@/lib/MongoConnect";
-import { WithId, Filter, Document } from "mongodb";
+import { WithId, Filter, Document, ObjectId } from "mongodb";
 
 export async function TestData(): Promise<ShopItem[]> {
   const testItem = new ShopItem("Test Name1", 100, "CPU", {
@@ -96,4 +96,12 @@ export function GetCatalogSearch(searchQuery: string) {
   ]);
 
   return query.toArray() as Promise<WithId<ShopItem>[]>;
+}
+
+export function GetShopItem(id: ObjectId) {
+  return shopItemCollection.findOne({ _id: id }) as Promise<WithId<ShopItem>>;
+}
+
+export function PriceFormat(cost: number) {
+  return `${cost.toFixed(2)}₴`;
 }
