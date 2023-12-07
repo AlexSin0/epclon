@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Cart() {
   return (
-    <main className="bg-slate-500">
+    <main className="bg-slate-500 p-1 text-white">
       <div className="p-2 flex border w-full">
         <div className="border">
           <Image
@@ -40,27 +40,35 @@ export default function Cart() {
             priority
           />
         </div>
-        <div className="border text-lg text-white p-1 max-w-[50%]">
+        <div className="border text-lg text-white p-1 max-w-[50%] relative">
           <p className="text-xl break-words">
-            NAME-VERYLOOOoooooooooooooooooooooooooooongNAAAAAAAAAAAAAAMEEEEEEEeeeeeeeeeeeeeeeeee
+            NAME-VERYLOOOooooooooooooooo ooooooooooooongNAAAAA
+            AAAAAAAAAMEEEEEEEeeeeeeeeeeeeeeeeee
           </p>
           <p className="text-sm">Brand:BRAND</p>
           <hr />
           <p>
             Price:<span>10000000$</span>
           </p>
-          <p>Color:COLOR</p>
-          <p>anotherCharacteristic</p>
-          <button type="submit" className="bg-[#21ad9a] p-2 rounded-xl w-full">
-            {" "}
+          <p>SMALL DESCRIPTION</p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          </p>
+          <button
+            type="submit"
+            className="bg-[#21ad9a] p-2 rounded-xl w-40 right-0 bottom-0 absolute"
+          >
             Add to Cart
           </button>
         </div>
       </div>
-      <div>
+      <div className="text-lg border bg-slate-600 p-2 flex">
+        <div className="max-w-[50%]">
+        <p>DESCRIPTION</p>
+        <p>NAME</p>
         <p>
-          DESCRIPTION
-          NAME
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -69,37 +77,36 @@ export default function Cart() {
           pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
           culpa qui officia deserunt mollit anim id est laborum.
         </p>
-      </div>
-      <div>ListOfCharacteristics
-      <table className="border">
-            <tr>
-                <th>Характеристика</th>
-                <th>Значення</th>
-            </tr>
-            <tr>
-                <td>Бренд</td>
-                <td>NVIDIA</td>
-            </tr>
-            <tr>
-                <td>Модель</td>
-                <td>GeForce RTX 3080</td>
-            </tr>
-            <tr>
-                <td>Обсяг пам'яті</td>
-                <td>10GB GDDR6X</td>
-            </tr>
-            <tr>
-                <td>Тактова частота ядра</td>
-                <td>1440 MHz</td>
-            </tr>
-            <tr>
-                <td>Тактова частота пам'яті</td>
-                <td>19 Gbps</td>
-            </tr>
-            <tr>
-                <td>ADD MORE</td>
-                <td>INFO</td>
-            </tr>
+        </div>
+        <table className="border border-slate-400 table-auto w-full">
+          <tr>
+            <th className="border border-slate-400">Характеристика</th>
+            <th className="border border-slate-400">Значення</th>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">Бренд</td>
+            <td className="border border-slate-400">NVIDIA</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">Модель</td>
+            <td className="border border-slate-400">GeForce RTX 3080</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">Обсяг пам'яті</td>
+            <td className="border border-slate-400">10GB GDDR6X</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">Тактова частота ядра</td>
+            <td className="border border-slate-400">1440 MHz</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">Тактова частота пам'яті</td>
+            <td className="border border-slate-400">19 Gbps</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-400">ADD MORE</td>
+            <td className="border border-slate-400">INFO</td>
+          </tr>
         </table>
       </div>
     </main>
