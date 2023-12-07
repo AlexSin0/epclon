@@ -8,7 +8,7 @@ export default function FilterGroup({
   return (
     <div className="my-2 p-2 bg-slate-500 rounded-lg">
       <div className="flex place-content-between">
-        <p>{name}</p>
+        <p>{name.charAt(0).toUpperCase() + name.slice(1)}</p>
         <p>+</p>
       </div>
       <hr />
