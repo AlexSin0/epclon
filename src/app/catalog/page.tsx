@@ -5,7 +5,7 @@ import {
   GetCatalogFiltered,
   GetCatalogSearch,
   SearchParams,
-} from "./Catalog";
+} from "@/lib/Catalog";
 
 export default async function Catalog({
   searchParams,

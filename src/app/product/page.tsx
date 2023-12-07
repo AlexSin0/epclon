@@ -1,93 +1,56 @@
+import { GetShopItem, PriceFormat } from "@/lib/Catalog";
+import { ObjectId } from "mongodb";
 import Image from "next/image";
 
-export default function Cart() {
+export default async function Product({
+  searchParams,
+}: {
+  searchParams: { id: string };
+}) {
+  if (!searchParams || !searchParams.id) {
+    return <p>Error. Item not found</p>;
+  }
+
+  let itemId;
+  try {
+    itemId = new ObjectId(searchParams.id);
+  } catch (error) {
+    return <p>Error. Item not found</p>;
+  }
+
+  const shopItem = await GetShopItem(itemId);
+
+  let props = [];
+  for (const key in shopItem.props) {
+    const val = (shopItem.props as any)[key];
+
+    props.push(
+      <tr key={key}>
+        <td className="border border-slate-400">{key}</td>
+        <td className="border border-slate-400">{val}</td>
+      </tr>
+    );
+  }
+
   return (
     <main className="bg-slate-500 p-1 text-white">
       <div className="p-2 flex w-full max-h-screen">
         <Image
-          src="/placeholderHD.jpg"
-          alt="placeholderHD.jpg"
+          src={shopItem.image}
+          alt={`${shopItem.name} image`}
           className="w-full"
           width={800}
           height={800}
-          priority
         />
         <div className="text-lg text-white p-1 max-w-[30%] ">
           <div>
-            <p className="text-xl break-words">
-              NAME-VERYLOOOooooooooooooooo ooooooooooooongNAAAAA
-              AAAAAAAAAMEEEEEEEeeeeeeeeeeeeeeeeee
-            </p>
-            <p className="text-sm">Brand:BRAND</p>
+            <p className="text-xl break-words">{shopItem.name}</p>
             <hr />
-            <p className="pt-1">
-              Price:<span>10000000$</span>
-            </p>
-            <button
-              type="submit"
-              className="bg-[#21ad9a] p-2 rounded-xl w-full"
-            >
-              Add to Cart
-            </button>
+            <p className="pt-1">{PriceFormat(shopItem.cost)}</p>
           </div>
           <div className="pt-5 max-h-[70%] overflow-scroll w-full">
             <table className="border border-slate-400 table-auto">
-              <tr>
-                <th className="border border-slate-400">Характеристика</th>
-                <th className="border border-slate-400">Значення</th>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">Бренд</td>
-                <td className="border border-slate-400">NVIDIA</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">Модель</td>
-                <td className="border border-slate-400">GeForce RTX 3080</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">Обсяг пам'яті</td>
-                <td className="border border-slate-400">10GB GDDR6X</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">
-                  Тактова частота ядра
-                </td>
-                <td className="border border-slate-400">1440 MHz</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">
-                  Тактова частота пам'яті
-                </td>
-                <td className="border border-slate-400">19 Gbps</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-400">ADD MORE</td>
-                <td className="border border-slate-400">INFO</td>
-              </tr>
+              {props}
             </table>
           </div>
         </div>
