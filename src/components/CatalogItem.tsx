@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function CatalogItem({ item }: { item: ShopItem }) {
   return (    
-    <div className="bg-slate-600 h-full p-4 text-white text-lg hover:outline hover:bg-[#667799] rounded max-w-xs">
+    <div className="bg-slate-600 h-full p-4 text-white text-lg hover:outline hover:bg-[#667799] rounded max-w-xs max-h-[300px]">
       <div className="mb-4 aspect-w-1 aspect-h-1">
         <Image
           src={item.image}
