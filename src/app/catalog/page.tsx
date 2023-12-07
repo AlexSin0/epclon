@@ -23,7 +23,7 @@ export default async function Catalog({
           <form>
             {filterNames.map((prop, index) => (
               <FilterGroup
-                name={prop}
+                name={prop.charAt(0).toUpperCase() + prop.slice(1)}
                 filterSet={filterProps[index]}
                 key={index}
               />
@@ -37,7 +37,7 @@ export default async function Catalog({
           </form>
         </div>
       </div>
-      <div className="p-4 pl-10 grid grid-cols-4 gap-4 items-center">
+      <div className="p-4 pl-10 w-full grid grid-cols-4 gap-4 items-center">
         {catalog.map((item, index) => (
           <CatalogItem item={item} key={index} />
         ))}
