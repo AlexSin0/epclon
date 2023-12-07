@@ -23,7 +23,7 @@ export default async function Catalog({
           <form>
             {filterNames.map((prop, index) => (
               <FilterGroup
-                name={prop.charAt(0).toUpperCase() + prop.slice(1)}
+                name={prop}
                 filterSet={filterProps[index]}
                 key={index}
               />
