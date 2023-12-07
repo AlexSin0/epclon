@@ -13,6 +13,7 @@ export default function Header() {
         ></Link>
         <NavButtonLink href="/cart">Cart</NavButtonLink>
         <NavButtonLink href="/catalog">Catalog</NavButtonLink>
+        <NavButtonLink href="/product">DELETE_THIS-Product</NavButtonLink>
       </div>
       <div className="flex items-center justify-between">
         <SearchBar />
