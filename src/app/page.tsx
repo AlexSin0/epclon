@@ -133,15 +133,31 @@ export default function Home() {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4 m-2 p-2">
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
-          01
-        </div>
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
-          02
-        </div>
-        <div className="bg-[url('/placeholder.jpg')] bg-center w-[400px] h-[400px]">
-          03
-        </div>
+    
+        <Image
+            src="/placeholder.jpg"
+            alt="placeholderjpg"
+            className=""
+            width={400}
+            height={400}
+            priority
+          />
+          <Image
+            src="/placeholder.jpg"
+            alt="placeholderjpg"
+            className=""
+            width={400}
+            height={400}
+            priority
+          />
+          <Image
+            src="/placeholder.jpg"
+            alt="placeholderjpg"
+            className=""
+            width={400}
+            height={400}
+            priority
+          />
       </div>
     </main>
   );

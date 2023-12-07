@@ -25,12 +25,12 @@ export default async function Catalog({
   return (
     <main className="bg-slate-500 flex ">
       <div className="flex">
-        <div className=" bg-slate-600 h-screen min-w-[300px] p-4 text-white text-lg sticky top-0">
+        <div className="bg-slate-600 h-screen min-w-[300px] p-2 text-white text-lg sticky top-0 relatives">
           <p className="text-2xl items-center justify-center flex">
             Filtration
           </p>
           <hr />
-          <form>
+          <form className="max-h-[90%] w-full overflow-scroll">
             {filterNames.map((prop, index) => (
               <FilterGroup
                 name={prop}
@@ -40,7 +40,7 @@ export default async function Catalog({
             ))}
             <button
               type="submit"
-              className="bg-[#21ad9a] p-2 rounded-xl w-full"
+              className="bg-[#21ad9a] p-1 mb-2 rounded-xl w-full static"
             >
               Apply
             </button>
