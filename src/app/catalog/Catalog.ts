@@ -50,20 +50,18 @@ export function GetAllFilterProps(filterNames: string[]) {
   );
 }
 
-export async function GetCatalogFull(): Promise<WithId<ShopItem>[]> {
-  const query = await shopItemCollection.find().toArray();
-  return query as WithId<ShopItem>[];
+export function GetCatalogFull(): Promise<WithId<ShopItem>[]> {
+  return shopItemCollection.find().toArray() as Promise<WithId<ShopItem>[]>;
 }
 
 export type SearchParams = { [key: string]: string | string[] | undefined };
 
-export async function GetCatalogFiltered(searchParams: SearchParams) {
+export function GetCatalogFiltered(searchParams: SearchParams) {
   const mongoFilter = ToMongoFilter(searchParams);
 
-  const query = await shopItemCollection.find(mongoFilter);
-  const array = await query.toArray();
+  const query = shopItemCollection.find(mongoFilter);
 
-  return array as WithId<ShopItem>[];
+  return query.toArray() as Promise<WithId<ShopItem>[]>;
 }
 
 function ToMongoFilter(searchParams: SearchParams) {
@@ -80,4 +78,22 @@ function ToMongoFilter(searchParams: SearchParams) {
   }
 
   return mongoFilter;
+}
+
+export function GetCatalogSearch(searchQuery: string) {
+  const query = shopItemCollection.aggregate([
+    {
+      $search: {
+        index: "searchIndex",
+        text: {
+          query: searchQuery,
+          path: {
+            wildcard: "*",
+          },
+        },
+      },
+    },
+  ]);
+
+  return query.toArray() as Promise<WithId<ShopItem>[]>;
 }

@@ -1,13 +1,23 @@
 import CatalogItem from "@/components/CatalogItem";
 import FilterGroup from "@/components/FilterGroup";
-import { GetAllFilterProps, GetCatalogFiltered, SearchParams } from "./Catalog";
+import {
+  GetAllFilterProps,
+  GetCatalogFiltered,
+  GetCatalogSearch,
+  SearchParams,
+} from "./Catalog";
 
 export default async function Catalog({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
-  const catalog = await GetCatalogFiltered(searchParams);
+  const searchParam = searchParams["search"];
+  delete searchParams["search"];
+
+  const catalog = await (searchParam && !Array.isArray(searchParam)
+    ? GetCatalogSearch(searchParam as string)
+    : GetCatalogFiltered(searchParams));
 
   const filterNames = ["color", "brand"];
   const filterProps = await GetAllFilterProps(filterNames);
