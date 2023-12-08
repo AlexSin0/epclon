@@ -7,3 +7,5 @@ const client = new MongoClient(uri);
 export const db = client.db("EpclonDB");
 
 export const userCollection = db.collection("Users");
+
+export const shopItemCollection = db.collection("ShopItems");
