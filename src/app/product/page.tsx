@@ -26,30 +26,40 @@ export default async function Product({
 
     props.push(
       <tr key={key}>
-        <td className="border border-slate-400">{key}</td>
-        <td className="border border-slate-400">{val}</td>
+        <td className="border border-slate-400 px-1.5 py-1">
+          {key.charAt(0).toUpperCase() + key.slice(1)}
+        </td>
+        <td className="border border-slate-400 px-1.5 py-1">{val}</td>
       </tr>
     );
   }
-
+  /* {name.charAt(0).toUpperCase() + name.slice(1)} */
   return (
-    <main className="bg-slate-500 p-1 text-white">
-      <div className="p-2 flex w-full max-h-screen">
+    <main className="bg-slate-500 text-white max-h-[30vh]">
+      <div className="p-1 flex w-full h-[80vh]">
         <Image
           src={shopItem.image}
           alt={`${shopItem.name} image`}
-          className="w-full"
-          width={800}
-          height={800}
+          className=" object-contain min-w-[30%] w-full rounded-lg"
+          width={900}
+          height={900}
         />
-        <div className="text-lg text-white p-1 max-w-[30%] ">
+        <div className="text-lg text-white p-2 w-full h-full">
           <div>
             <p className="text-xl break-words">{shopItem.name}</p>
             <hr />
-            <p className="pt-1">{PriceFormat(shopItem.cost)}</p>
+            <p className="pt-1">
+              Price:
+              <span className="underline pl-1">{PriceFormat(shopItem.cost)}</span>
+            </p>
           </div>
-          <div className="pt-5 max-h-[70%] overflow-scroll w-full">
-            <table className="border border-slate-400 table-auto">
+          <div className="pt-5 max-h-[70%] overflow-auto w-full static">
+            <p>Product characteristics:</p>
+            <table className="bg-[#596273] w-full min-w-[50%] table-auto">
+              <tr className="bg-[#4c5467]">
+                <th className="border border-slate-400 ">Characteristic</th>
+                <th className="border border-slate-400">Value</th>
+              </tr>
               {props}
             </table>
           </div>

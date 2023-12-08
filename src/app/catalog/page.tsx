@@ -30,7 +30,7 @@ export default async function Catalog({
             Filtration
           </p>
           <hr />
-          <form className="max-h-[90%] w-full overflow-scroll">
+          <form className="max-h-[82vh] w-full overflow-auto">
             {filterNames.map((prop, index) => (
               <FilterGroup
                 name={prop}
