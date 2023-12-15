@@ -3,20 +3,34 @@ import FilterGroup from "@/components/FilterGroup";
 import {
   GetAllFilterProps,
   GetCatalogFiltered,
+  GetCatalogLiked,
   GetCatalogSearch,
+  GetUserLiked,
   SearchParams,
 } from "@/lib/Catalog";
+import { ObjectId, WithId } from "mongodb";
+import { getServerSession } from "next-auth";
 
 export default async function Catalog({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
+  const session = await getServerSession();
+  const email = session?.user?.email;
+  const liked: ObjectId[] = email ? await GetUserLiked(email) : [];
+
+  const likedStr = liked.map((x) => x.toString());
+
   const searchParam = searchParams["search"];
   delete searchParams["search"];
 
+  const likedParam = searchParams["liked"];
+
   const catalog = await (searchParam && !Array.isArray(searchParam)
     ? GetCatalogSearch(searchParam as string)
+    : likedParam === ""
+    ? GetCatalogLiked(liked)
     : GetCatalogFiltered(searchParams));
 
   const filterNames = ["color", "brand"];
@@ -49,7 +63,11 @@ export default async function Catalog({
       </div>
       <div className="p-4 pl-10 w-full grid grid-cols-4 gap-4">
         {catalog.map((item, index) => (
-          <CatalogItem item={item} key={index} />
+          <CatalogItem
+            item={item}
+            key={index}
+            isLiked={session ? likedStr.includes(item._id.toString()) : null}
+          />
         ))}
       </div>
     </main>
