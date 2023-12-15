@@ -1,7 +1,7 @@
 import { CpuProps } from "@/types/ItemProps";
 import { ShopItem } from "@/types/ShopItem";
 
-import { shopItemCollection } from "@/lib/MongoConnect";
+import { shopItemCollection, userCollection } from "@/lib/MongoConnect";
 import { WithId, Filter, Document, ObjectId } from "mongodb";
 
 export async function TestData(): Promise<ShopItem[]> {
@@ -96,6 +96,20 @@ export function GetCatalogSearch(searchQuery: string) {
   ]);
 
   return query.toArray() as Promise<WithId<ShopItem>[]>;
+}
+
+export async function GetUserLiked(email: string) {
+  const user = await userCollection.findOne({
+    email: email,
+  });
+
+  return user?.liked ?? [];
+}
+
+export function GetCatalogLiked(liked: ObjectId[]) {
+  return shopItemCollection.find({ _id: { $in: liked } }).toArray() as Promise<
+    WithId<ShopItem>[]
+  >;
 }
 
 export function GetShopItem(id: ObjectId) {

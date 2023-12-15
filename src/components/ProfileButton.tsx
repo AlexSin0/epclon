@@ -20,9 +20,11 @@ export default function ProfileButton() {
           <button className={entryStyle} onClick={() => signOut()}>
             Sign out
           </button>
-
           <Link className={entryStyle} href="/profile">
             Your Profile
+          </Link>
+          <Link className={entryStyle} href="/catalog?liked">
+            Favorites
           </Link>
         </>
       ) : (
