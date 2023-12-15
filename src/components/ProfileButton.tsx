@@ -13,8 +13,8 @@ export default function ProfileButton() {
 
   const menuPanel = (
     <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
-      <span className={entryStyle}>{session?.user?.name ?? "Guest"}</span>
-      <hr />
+      {/* <span className={entryStyle}>{session?.user?.name ?? "Guest"}</span>
+      <hr /> */}
       {session ? (
         <>
           <button className={entryStyle} onClick={() => signOut()}>

@@ -16,6 +16,7 @@ export default async function dbRegister(user: User) {
   }
 
   const newUser = new ShopUser(user.email);
+  if (user.name) newUser.name = user.name;
 
   userCollection.insertOne(newUser);
 
