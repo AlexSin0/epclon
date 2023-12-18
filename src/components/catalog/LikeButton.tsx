@@ -16,8 +16,8 @@ export default function LikeButton({
   return (
     <form className="" action={likeHandler}>
       <input
-        className={`rounded-lg border-pink-500 border-4 m-1 p-1 cursor-pointer ${
-          isLiked ? "bg-pink-500" : ""
+        className={`rounded-lg border-rose-500 border-4 p-1 aspect-square cursor-pointer bg-rose-500 ${
+          isLiked ? "" : "bg-opacity-10"
         }`}
         type="submit"
         name={id.toString()}
