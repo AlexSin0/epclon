@@ -1,15 +1,16 @@
-import CatalogItem from "@/components/CatalogItem";
-import FilterGroup from "@/components/FilterGroup";
+import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
+
+import CatalogItem from "@/components/catalog/CatalogItem";
+import FilterGroup from "@/components/catalog/FilterGroup";
 import {
   GetAllFilterProps,
   GetCatalogFiltered,
-  GetCatalogLiked,
+  GetCatalogById,
   GetCatalogSearch,
   GetUserLiked,
   SearchParams,
 } from "@/lib/Catalog";
-import { ObjectId, WithId } from "mongodb";
-import { getServerSession } from "next-auth";
 
 export default async function Catalog({
   searchParams,
@@ -18,33 +19,43 @@ export default async function Catalog({
 }) {
   const session = await getServerSession();
   const email = session?.user?.email;
-  const liked: ObjectId[] = email ? await GetUserLiked(email) : [];
 
+  const liked = email ? await GetUserLiked(email) : [];
   const likedStr = liked.map((x) => x.toString());
 
-  const searchParam = searchParams["search"];
-  delete searchParams["search"];
-
   const likedParam = searchParams["liked"];
+  const searchParam = searchParams["search"];
 
-  const catalog = await (searchParam && !Array.isArray(searchParam)
-    ? GetCatalogSearch(searchParam as string)
-    : likedParam === ""
-    ? GetCatalogLiked(liked)
-    : GetCatalogFiltered(searchParams));
+  let catalog;
+  if (likedParam === "") {
+    catalog = await GetCatalogById(liked);
+  } else if (searchParam && !Array.isArray(searchParam)) {
+    catalog = await GetCatalogSearch(searchParam);
+  } else {
+    catalog ??= await GetCatalogFiltered(searchParams);
+  }
 
   const filterNames = ["color", "brand"];
   const filterProps = await GetAllFilterProps(filterNames);
 
+  const basket = cookies().get("basket")?.value;
+  const basketArr: string[] = basket ? JSON.parse(basket) : [];
+
   return (
-    <main className="bg-slate-500 flex ">
+    <main className="flex bg-zinc-400 ">
       <div className="flex">
-        <div className="bg-slate-600 h-screen min-w-[300px] p-2 text-white text-lg sticky top-0 relatives">
+        <div className="bg-slate-600 h-screen min-w-[300px] p-2 text-white text-lg sticky top-0">
           <p className="text-2xl items-center justify-center flex">
             Filtration
           </p>
           <hr />
           <form className="max-h-[82vh] w-full overflow-auto">
+            <button
+              type="submit"
+              className="bg-[#21ad9a] p-2 my-4 rounded-xl w-full static"
+            >
+              Apply
+            </button>
             {filterNames.map((prop, index) => (
               <FilterGroup
                 name={prop}
@@ -52,21 +63,16 @@ export default async function Catalog({
                 key={index}
               />
             ))}
-            <button
-              type="submit"
-              className="bg-[#21ad9a] p-1 mb-2 rounded-xl w-full static"
-            >
-              Apply
-            </button>
           </form>
         </div>
       </div>
-      <div className="p-4 pl-10 w-full grid grid-cols-4 gap-4">
+      <div className="p-4 w-full grid grid-cols-4 gap-4">
         {catalog.map((item, index) => (
           <CatalogItem
             item={item}
             key={index}
-            isLiked={session ? likedStr.includes(item._id.toString()) : null}
+            isLiked={email ? likedStr.includes(item._id.toString()) : null}
+            isInBasket={basketArr.includes(item._id.toString())}
           />
         ))}
       </div>

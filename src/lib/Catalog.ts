@@ -98,7 +98,7 @@ export function GetCatalogSearch(searchQuery: string) {
   return query.toArray() as Promise<WithId<ShopItem>[]>;
 }
 
-export async function GetUserLiked(email: string) {
+export async function GetUserLiked(email: string): Promise<ObjectId[]> {
   const user = await userCollection.findOne({
     email: email,
   });
@@ -106,7 +106,7 @@ export async function GetUserLiked(email: string) {
   return user?.liked ?? [];
 }
 
-export function GetCatalogLiked(liked: ObjectId[]) {
+export function GetCatalogById(liked: ObjectId[]) {
   return shopItemCollection.find({ _id: { $in: liked } }).toArray() as Promise<
     WithId<ShopItem>[]
   >;
