@@ -1,125 +1,200 @@
-import { Collection, Document } from "mongodb";
+"use client";
 
-export default async function DataTable({
+import { useState, useEffect } from "react";
+
+export default function DataTable({
   caption,
-  collection,
-  addHandle,
-  delHandle,
-  editHandle,
+  content,
+  columnStyle,
 }: {
   caption: string;
-  collection: Collection<Document>;
-  addHandle: (formData: FormData) => void;
-  delHandle: (formData: FormData) => void;
-  editHandle: (formData: FormData) => void;
+  content: string[][];
+  columnStyle: string;
 }) {
-  const data = await collection.find().toArray();
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const val = data[0];
-  const keys = (
-    Object.getOwnPropertyNames(val).filter(
-      (x) => x !== "_id"
-    ) as (keyof Document)[]
-  ).map((x) => x.toString());
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
+    setIsLoading(true);
+    fetch(`/api/data/${caption}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+        setIsLoading(false);
+      });
+  }
+
+  if (isLoading) return <p className="text-white">Loading...</p>;
+  if (data.length === 0) return <p className="text-white">No data to show</p>;
+
+  const className = "rounded-lg border border-black m-1 w-[25%] h-11";
 
   return (
-    <div className="">
-      <p>{formatString(caption)}</p>
-      {/* Headers */}
-      <div className={`grid grid-cols-${keys.length + 1}`}>
-        {keys.map((k, i) => (
-          <div key={i} className="border-[3px] p-2">
-            {formatString(k.toString())}
+    <div>
+      <div className={`grid ${columnStyle}`}>
+        {content.map(([key]) => (
+          <div
+            key={key}
+            className="border border-black p-3 text-center bg-slate-600 text-white"
+          >
+            {formatString(key)}
           </div>
         ))}
       </div>
-      {/* Data */}
-      {data.map((x, i) => (
-        <div className="flex" key={i}>
-          <form action={editHandle} className="flex">
-            <div className={`grid grid-cols-${keys.length}`}>
-              {keys.map((k) => (
-                <input
-                  className="border p-2 max-w-xl bg-gray-600"
-                  key={k}
-                  name={k}
-                  placeholder={k}
-                  type={
-                    x[k] instanceof Date
-                      ? "date"
-                      : typeof val[k] === "number"
-                      ? "number"
-                      : "text"
-                  }
-                  defaultValue={
-                    typeof x[k] === "object" ? JSON.stringify(x[k]) : x[k]
-                  }
-                />
-              ))}
-            </div>
-            <input
-              type="submit"
-              className="bg-emerald-600 text-white h-10 p-2 my-1 border hover:underline cursor-pointer"
-              value="Edit"
-              readOnly
-              name={x._id.toString()}
-            />
-            <input
-              type="Reset"
-              className="bg-orange-600 text-white h-10 p-2 my-1 border hover:underline cursor-pointer"
-              value="Reset"
-              readOnly
-            />
-          </form>
-          <form action={delHandle}>
-            <input
-              type="submit"
-              className="bg-red-600 text-white h-10 p-2 my-1 border hover:underline cursor-pointer"
-              value="Delete"
-              name={x._id.toString()}
-              readOnly
-            />
-          </form>
-        </div>
-      ))}
-      {/* Add */}
-      <form action={addHandle} className={`grid grid-cols-${keys.length + 1}`}>
-        {keys.map((k, i) => (
-          <input
-            className="border p-2 max-w-xl bg-gray-600"
-            type={
-              val[k] instanceof Date
-                ? "date"
-                : typeof val[k] === "number"
-                ? "number"
-                : "text"
-            }
-            name={k}
-            placeholder={k}
-            key={k}
-            required
-          />
-        ))}
-        <button
-          className="bg-cyan-700 text-white h-10 p-2 my-1 border hover:underline cursor-pointer"
-          type="submit"
+      {data.map((item, index) => (
+        <form
+          className={`grid ${columnStyle}`}
+          key={index}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target as HTMLFormElement);
+            const formEntries = Object.fromEntries(formData);
+
+            const id = item["_id"];
+
+            const obj: any = {};
+            content.forEach(([key, type, extra]) => {
+              if (extra === "readonly") return;
+
+              try {
+                switch (type) {
+                  case "object":
+                    if (!formEntries[key]) break;
+                    obj[key] = JSON.parse(formEntries[key].toString());
+                    break;
+                  default:
+                    obj[key] = formEntries[key];
+                    break;
+                }
+              } catch (err: any) {
+                prompt(JSON.stringify(err), "Error");
+                return;
+              }
+            });
+
+            fetch(`/api/data/${caption}/${id}`, {
+              method: "PUT",
+              body: JSON.stringify(obj),
+            }).then(() => {
+              fetchData();
+            });
+          }}
         >
-          Add
-        </button>
+          {content.map(([key, type, extra]) => (
+            <input
+              className="border border-black bg-slate-500 p-3 text-white"
+              key={key}
+              name={key}
+              placeholder={key}
+              type={type}
+              defaultValue={
+                type === "object"
+                  ? JSON.stringify(item[key])
+                  : type === "date"
+                  ? formatDate(new Date(item[key]))
+                  : item[key]
+              }
+              required={extra === "required"}
+              readOnly={extra === "readonly"}
+            />
+          ))}
+          <div>
+            <button type="submit" className={`bg-green-500 ${className}`}>
+              Edit
+            </button>
+            <button type="reset" className={`bg-yellow-500 ${className}`}>
+              Res
+            </button>
+            <button
+              className={`bg-red-500 ${className}`}
+              onClick={() => {
+                fetch(`/api/data/${caption}/${(item as any)._id}`, {
+                  method: "DELETE",
+                }).then(() => {
+                  fetchData();
+                });
+              }}
+              type="button"
+            >
+              Del
+            </button>
+          </div>
+        </form>
+      ))}
+      <form
+        className={`grid ${columnStyle}`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target as HTMLFormElement);
+          const formEntries = Object.fromEntries(formData);
+
+          const obj: any = {};
+          content.forEach(([key, type, extra]) => {
+            if (extra === "readonly") return;
+
+            try {
+              switch (type) {
+                case "object":
+                  if (!formEntries[key]) break;
+                  obj[key] = JSON.parse(formEntries[key].toString());
+                  break;
+                default:
+                  obj[key] = formEntries[key];
+                  break;
+              }
+            } catch (err: any) {
+              prompt(JSON.stringify(err), "Error");
+              return;
+            }
+          });
+
+          fetch(`/api/data/${caption}`, {
+            method: "POST",
+            body: JSON.stringify(obj),
+          }).then(() => {
+            fetchData();
+          });
+        }}
+      >
+        {content.map(([key, type, extra]) =>
+          extra === "readonly" ? (
+            <div></div>
+          ) : (
+            <input
+              className="border border-black p-2 bg-slate-500 text-white"
+              key={key}
+              name={key}
+              placeholder={key}
+              type={type}
+              required={extra === "required"}
+              readOnly={extra === "readonly"}
+            />
+          )
+        )}
+        <div>
+          <input
+            type="submit"
+            value="Add"
+            className={`bg-blue-500 ${className}`}
+          />
+        </div>
       </form>
     </div>
   );
 }
 
 function formatDate(date: Date): string {
+  console.log(date);
+
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  const formattedDay = day < 10 ? `0${day}` : `${day}`;
-  const formattedMonth = month < 10 ? `0${month}` : `${month}`;
-
-  return `${formattedDay}.${formattedMonth}.${year}`;
+  return `${year}-${month}-${day}`;
 }
 
 function formatString(input: string): string {

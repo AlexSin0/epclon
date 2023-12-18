@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 const IN_BASKET = "To cart";
 const NOT_IN_BUSKET = "Out of cart";
 
-export default function LikeButton({
+export default function BasketButton({
   id,
   isInBasket,
 }: {
@@ -13,7 +13,7 @@ export default function LikeButton({
   isInBasket: boolean;
 }) {
   return (
-    <form className="flex-grow" action={likeHandler}>
+    <form className="flex-grow max-w-[300px]" action={likeHandler}>
       <input
         className={`rounded-lg border-sky-600 border-4 p-1 cursor-pointer w-full bg-sky-600 ${
           isInBasket ? "" : "bg-opacity-10"

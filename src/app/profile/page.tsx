@@ -1,9 +1,10 @@
 import { userCollection } from "@/lib/MongoConnect";
+import ShopUser from "@/types/ShopUser";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 
-const keys = ["name", "bio"];
+const keys: (keyof ShopUser)[] = ["name", "bio"];
 
 export default async function Home() {
   const session = await getServerSession();
@@ -17,6 +18,10 @@ export default async function Home() {
   const profile = await userCollection.findOne({
     email: email,
   });
+
+  if (!profile) {
+    return <p>An error has occurred. Your profile was not found.</p>;
+  }
 
   return (
     <main className="flex bg-slate-900 text-white">
@@ -46,7 +51,7 @@ export default async function Home() {
               className="block bg-slate-700 w-full p-1"
               name={key}
               placeholder={key}
-              defaultValue={profile![key]}
+              defaultValue={profile[key]?.toString()}
             />
           </label>
         ))}

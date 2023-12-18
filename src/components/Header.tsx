@@ -8,11 +8,11 @@ export default async function Header() {
   const session = await getServerSession();
 
   return (
-    <nav className="bg-[#303a50] flex items-center justify-between h-[75px]">
+    <nav className="bg-gray-800 flex items-center justify-between h-[75px]">
       <div className="flex items-center">
         <Link
           href="/"
-          className="rounded-full m-3 w-[50px] h-[50px] bg-[url('/logo.jpg')] bg-cover"
+          className="rounded-xl m-3 w-[50px] h-[50px] bg-[url('/logo.jpg')] bg-cover"
         ></Link>
         <NavButtonLink href="/catalog">Catalog</NavButtonLink>
         <NavButtonLink href="/cart">Cart</NavButtonLink>
