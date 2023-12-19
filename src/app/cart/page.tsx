@@ -22,10 +22,11 @@ export default async function Cart() {
   });
 
   const catalog = await GetCatalogById(basketIds);
+  const total = catalog.reduce((acc, item) => acc + Number(item.cost), 0);
 
   return (
     <main className="flex bg-zinc-400 ">
-      <div className="p-4 px-12 w-full grid grid-cols-5 gap-4">
+      <div className="p-4 px-12 w-full grid grid-cols-4 gap-4">
         {catalog.length === 0 ? (
           <p
             className="
@@ -47,18 +48,16 @@ export default async function Cart() {
           ))
         )}
       </div>
-      <div className="w-[20vw] border">
-        <div
-          className="
-          text-white text-lg text-center
-          bg-slate-600 rounded-xl min-h-[10vh] w-[15vw]
-          sticky  top-[40vh]
-          "
-        >
-          <p>Total: TOTAL$</p>
-          <p>itemCount?</p>
-          <button className="bg-[#21ad9a] py-1 m-1 w-[80%] rounded-xl static">
-            Buy
+      <div
+        className="w-[25%]
+      text-white text-lg text-center
+      bg-slate-600 min-h-[10vh]
+      sticky top-[40vh]"
+      >
+        <div>
+          <p>Total: {`${total.toFixed(2)}₴`}</p>
+          <button className="bg-emerald-600 py-1 m-1 w-[80%] rounded-xl static">
+            Buy {catalog.length} items
           </button>
         </div>
       </div>
