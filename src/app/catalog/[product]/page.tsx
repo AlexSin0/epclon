@@ -34,34 +34,57 @@ export default async function Catalog({
       case "cpu":
         productType = "CPU";
         filterNames = [
+
           "socket",
-          "model",
           "threadCount",
           "coreCount",
-          "clockspeed_GHz",
-          "powerUsage_W",
+          "clockspeed_GHz"
         ];
-        break;
+      break;
       case "gpu":
         productType = "GPU";
-        filterNames = ["brand", "memory"];
-        break;
+        filterNames = [
+        "pcieVersion", 
+        "gpuCableType", 
+        "memoryCapacity_Gb",
+        "memoryStandard"
+      ];
+      break;
       case "ram":
         productType = "RAM";
-        filterNames = ["brand", "memory"];
-        break;
+        filterNames = [
+        "ramStandard", 
+        "frequency_GHz", 
+        "ramCapacity_Gb", 
+      ];
+      break;
       case "hd":
         productType = "Hard Drive";
-        filterNames = ["brand", "capacity"];
-        break;
+        filterNames = [
+        "memoryCapacity_Gb", 
+        "readSpeed_MBs", 
+        "writeSpeed_MBs", 
+        "type", 
+        "intrface"];
+      break;
       case "mb":
         productType = "Motherboard";
-        filterNames = ["brand", "socket"];
-        break;
+        filterNames = [
+        "socket", 
+        "ramStandard", 
+        "pcieVersion", 
+        "ramSlotCount", 
+        "type"];
+      break;
       case "psu":
         productType = "PSU";
-        filterNames = ["brand", "power"];
-        break;
+        filterNames = [
+        "gpuCableType", 
+        "power_W", 
+        "efficiencyCertificate"];
+      break;
+      default:
+      break;
     }
 
     filterNames.push(...["color", "brand"]);
