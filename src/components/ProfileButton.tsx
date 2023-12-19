@@ -13,16 +13,16 @@ export default function ProfileButton() {
 
   const menuPanel = (
     <div className="absolute right-5 z-10 mt-2 w-47 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
-      <span className={entryStyle}>{session?.user?.name ?? "Guest"}</span>
-      <hr />
       {session ? (
         <>
           <button className={entryStyle} onClick={() => signOut()}>
             Sign out
           </button>
-
           <Link className={entryStyle} href="/profile">
             Your Profile
+          </Link>
+          <Link className={entryStyle} href="/catalog?liked">
+            Favorites
           </Link>
         </>
       ) : (
@@ -40,7 +40,7 @@ export default function ProfileButton() {
       <Image
         src={session?.user?.image ?? "/placeholder.jpg"}
         alt="User profile icon"
-        className="rounded-full m-3 hover:cursor-pointer"
+        className="rounded-xl m-3 hover:cursor-pointer"
         width={50}
         height={50}
         onClick={() => setClickState(!clickState)}

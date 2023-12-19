@@ -2,17 +2,17 @@ export default function SearchBar() {
   return (
     <div className="flex justify-between">
       <form
-        className="p-0.5 bg-white rounded-full h-11 flex justify-between text-lg"
+        className="p-0.5 bg-white rounded-xl h-11 flex justify-between text-lg"
         action="catalog"
       >
         <input
-          className="rounded-full pl-2 text-black"
+          className="rounded-xl p-2 text-black mr-0.5"
           type="text"
           placeholder="Search..."
           name="search"
         />
         <button
-          className="bg-[#21ad9a] float-right w-10 h-10 rounded-full text-white"
+          className="bg-emerald-600 float-right aspect-square rounded-xl text-white"
           type="submit"
         >
           Go
