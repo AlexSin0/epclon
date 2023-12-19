@@ -15,7 +15,7 @@ export default function BasketButton({
   return (
     <form className="flex-grow max-w-[300px]" action={likeHandler}>
       <input
-        className={`rounded-lg border-sky-600 border-4 p-1 cursor-pointer w-full bg-sky-600 ${
+        className={`rounded-lg border-sky-500 border-4 p-1 cursor-pointer w-full bg-sky-600 ${
           isInBasket ? "" : "bg-opacity-10"
         }`}
         type="submit"
