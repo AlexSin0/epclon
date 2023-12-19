@@ -42,7 +42,9 @@ export default function PaymentForm({ amount }: { amount: number }) {
 
   return (
     <form onSubmit={onSubmit} className="p-2">
-      <h1 className="text-black text-center mb-4">Payment {amount}₴</h1>
+      <h1 className="text-black text-center mb-4">
+        Payment {`${Number(amount).toFixed(2)}₴`}
+      </h1>
       <CardElement />
       <button
         type="submit"

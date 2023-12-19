@@ -4,8 +4,7 @@ import { WithId } from "mongodb";
 
 import BasketButton from "./BasketButton";
 import LikeButton from "./LikeButton";
-import { PriceFormat } from "@/lib/Catalog";
-import { ShopItem } from "@/types/ShopItem";
+import ShopItem from "@/types/ShopItem";
 
 export default function CatalogItem({
   item,
@@ -31,7 +30,7 @@ export default function CatalogItem({
         <p className="flex justify-center overflow-hidden">
           <span className="truncate">{item.name}</span>
         </p>
-        <p className="text-center">{PriceFormat(item.cost)}</p>
+        <p className="text-center">{`${Number(item.cost).toFixed(2)}₴`}</p>
       </Link>
       <div className="flex gap-2 my-1">
         <BasketButton id={item._id} isInBasket={isInBasket} />
