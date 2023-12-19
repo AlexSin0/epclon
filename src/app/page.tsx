@@ -4,16 +4,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[url('/background.jpg')] bg-fixed text-black">
       <div className="">
-        <div
-          id="carouselExampleCaptions"
-          className="relative"
-        >
-          <div
-            className="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0"
-          >
-            <button
-              className="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
-            ></button>
+        <div id="carouselExampleCaptions" className="relative">
+          <div className="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0">
+            <button className="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"></button>
             <button
               type="button"
               className="mx-[3px] box-content h-[3px] w-[30px] flex-initial cursor-pointer border-0 border-y-[10px] border-solid border-transparent bg-white bg-clip-padding p-0 -indent-[999px] opacity-50 transition-opacity duration-[600ms] ease-[cubic-bezier(0.25,0.1,0.25,1.0)] motion-reduce:transition-none"
@@ -89,13 +82,13 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 className="h-6 w-6"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M15.75 19.5L8.25 12l7.5-7.5"
                 />
               </svg>
@@ -115,13 +108,13 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 className="h-6 w-6"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M8.25 4.5l7.5 7.5-7.5 7.5"
                 />
               </svg>
@@ -133,31 +126,30 @@ export default function Home() {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4 m-2 p-2">
-    
         <Image
-            src="/placeholder.jpg"
-            alt="placeholderjpg"
-            className=""
-            width={400}
-            height={400}
-            priority
-          />
-          <Image
-            src="/placeholder.jpg"
-            alt="placeholderjpg"
-            className=""
-            width={400}
-            height={400}
-            priority
-          />
-          <Image
-            src="/placeholder.jpg"
-            alt="placeholderjpg"
-            className=""
-            width={400}
-            height={400}
-            priority
-          />
+          src="/placeholder.jpg"
+          alt="placeholderjpg"
+          className=""
+          width={400}
+          height={400}
+          priority
+        />
+        <Image
+          src="/placeholder.jpg"
+          alt="placeholderjpg"
+          className=""
+          width={400}
+          height={400}
+          priority
+        />
+        <Image
+          src="/placeholder.jpg"
+          alt="placeholderjpg"
+          className=""
+          width={400}
+          height={400}
+          priority
+        />
       </div>
     </main>
   );
