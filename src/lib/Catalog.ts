@@ -1,4 +1,4 @@
-import ShopItem from "@/types/ShopItem";
+import ShopItem, { ItemType } from "@/types/ShopItem";
 
 import { shopItemCollection, userCollection } from "@/lib/MongoConnect";
 import { WithId, Filter, Document, ObjectId } from "mongodb";
@@ -73,6 +73,10 @@ export function GetCatalogById(liked: ObjectId[]) {
   return shopItemCollection.find({ _id: { $in: liked } }).toArray() as Promise<
     WithId<ShopItem>[]
   >;
+}
+
+export function GetCatalogType(type: ItemType) {
+  return shopItemCollection.find({ itemType: type }).toArray();
 }
 
 export function GetShopItem(id: ObjectId) {

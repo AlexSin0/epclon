@@ -6,17 +6,18 @@ import CatalogItem from "@/components/catalog/CatalogItem";
 import FilterGroup from "@/components/catalog/FilterGroup";
 import {
   GetAllFilterProps,
-  GetCatalogFiltered,
-  GetCatalogById,
-  GetCatalogSearch,
   GetUserLiked,
   SearchParams,
+  GetCatalogType,
 } from "@/lib/Catalog";
+import { ItemType } from "@/types/ShopItem";
 
 export default async function Catalog({
   searchParams,
+  params,
 }: {
   searchParams: SearchParams;
+  params: { product: string };
 }) {
   const session = await getServerSession();
   const email = session?.user?.email;
@@ -24,19 +25,51 @@ export default async function Catalog({
   const liked = email ? await GetUserLiked(email) : [];
   const likedStr = liked.map((x) => x.toString());
 
-  const likedParam = searchParams["liked"];
-  const searchParam = searchParams["search"];
+  let catalog: any[] = [];
+  let filterNames: string[] = [];
+  try {
+    let productType: ItemType | undefined;
 
-  let catalog;
-  if (likedParam === "") {
-    catalog = await GetCatalogById(liked);
-  } else if (searchParam && !Array.isArray(searchParam)) {
-    catalog = await GetCatalogSearch(searchParam);
-  } else {
-    catalog ??= await GetCatalogFiltered(searchParams);
+    switch (params.product) {
+      case "cpu":
+        productType = "CPU";
+        filterNames = [
+          "socket",
+          "model",
+          "threadCount",
+          "coreCount",
+          "clockspeed_GHz",
+          "powerUsage_W",
+        ];
+        break;
+      case "gpu":
+        productType = "GPU";
+        filterNames = ["brand", "memory"];
+        break;
+      case "ram":
+        productType = "RAM";
+        filterNames = ["brand", "memory"];
+        break;
+      case "hd":
+        productType = "Hard Drive";
+        filterNames = ["brand", "capacity"];
+        break;
+      case "mb":
+        productType = "Motherboard";
+        filterNames = ["brand", "socket"];
+        break;
+      case "psu":
+        productType = "PSU";
+        filterNames = ["brand", "power"];
+        break;
+    }
+
+    filterNames.push(...["color", "brand"]);
+    catalog = await GetCatalogType(productType!);
+  } catch (err) {
+    console.log(err);
   }
 
-  const filterNames = ["color", "brand"];
   const filterProps = await GetAllFilterProps(filterNames);
 
   const basket = cookies().get("basket")?.value;

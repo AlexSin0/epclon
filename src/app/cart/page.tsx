@@ -1,4 +1,4 @@
-import Checkout from "@/components/Checkout";
+import Checkout from "@/components/payment/Checkout";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import { GetCatalogById, GetUserLiked } from "@/lib/Catalog";
 import { Purchase } from "@/lib/Payment";
