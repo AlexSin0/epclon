@@ -5,7 +5,7 @@ export type ItemType =
   | "GPU"
   | "Motherboard"
   | "RAM"
-  | "Hard Drive"
+  | "HardDrive"
   | "PSU";
 
 export default class ShopItem {

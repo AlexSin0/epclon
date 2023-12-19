@@ -8,7 +8,7 @@ import {
   GetAllFilterProps,
   GetUserLiked,
   SearchParams,
-  GetCatalogType,
+  GetCatalogTypeFiltered,
 } from "@/lib/Catalog";
 import { ItemType } from "@/types/ShopItem";
 
@@ -51,7 +51,7 @@ export default async function Catalog({
         filterNames = ["brand", "memory"];
         break;
       case "hd":
-        productType = "Hard Drive";
+        productType = "HardDrive";
         filterNames = ["brand", "capacity"];
         break;
       case "mb":
@@ -65,7 +65,8 @@ export default async function Catalog({
     }
 
     filterNames.push(...["color", "brand"]);
-    catalog = await GetCatalogType(productType!);
+
+    catalog = await GetCatalogTypeFiltered(productType!, searchParams);
   } catch (err) {
     console.log(err);
   }

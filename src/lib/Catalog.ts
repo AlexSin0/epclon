@@ -79,6 +79,19 @@ export function GetCatalogType(type: ItemType) {
   return shopItemCollection.find({ itemType: type }).toArray();
 }
 
+export function GetCatalogTypeFiltered(
+  type: ItemType,
+  searchParams: SearchParams
+) {
+  const mongoFilter = ToMongoFilter(searchParams);
+
+  mongoFilter["itemType"] = type;
+
+  const query = shopItemCollection.find(mongoFilter);
+
+  return query.toArray() as Promise<WithId<ShopItem>[]>;
+}
+
 export function GetShopItem(id: ObjectId) {
   return shopItemCollection.findOne({ _id: id }) as Promise<WithId<ShopItem>>;
 }
