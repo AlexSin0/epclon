@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 main {
-  min-height: 80vh;
+  min-height: 82vh;
 }
 /* remove the input focus blue box, it will be in the wrong place. */
 .searchInput:focus {

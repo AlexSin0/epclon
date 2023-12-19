@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 
+import ItemTypeButton from "@/components/catalog/ItemTypeButtom";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import FilterGroup from "@/components/catalog/FilterGroup";
 import {
@@ -42,7 +43,7 @@ export default async function Catalog({
   const basketArr: string[] = basket ? JSON.parse(basket) : [];
 
   return (
-    <main className="flex bg-zinc-400 ">
+    <main className="flex bg-zinc-400">
       <div className="flex">
         <div className="bg-slate-600 h-screen min-w-[300px] p-2 text-white text-lg sticky top-0">
           <p className="text-2xl items-center justify-center flex">
@@ -66,15 +67,37 @@ export default async function Catalog({
           </form>
         </div>
       </div>
-      <div className="p-4 w-full grid grid-cols-4 gap-4">
-        {catalog.map((item, index) => (
-          <CatalogItem
-            item={item}
-            key={index}
-            isLiked={email ? likedStr.includes(item._id.toString()) : null}
-            isInBasket={basketArr.includes(item._id.toString())}
-          />
-        ))}
+      <div className="w-full">
+        <div className="bg-slate-600 h-[40px] w-full sticky top-0 flex grid grid-cols-6">
+          <ItemTypeButton>
+            CPU
+          </ItemTypeButton>
+          <ItemTypeButton>
+            PCU
+          </ItemTypeButton>
+          <ItemTypeButton>
+            GPU
+          </ItemTypeButton>
+          <ItemTypeButton>
+            RAM
+          </ItemTypeButton>
+          <ItemTypeButton>
+            HardDrive
+          </ItemTypeButton>
+          <ItemTypeButton>
+            Motherboard
+          </ItemTypeButton>
+        </div>
+        <div className="p-4 w-full grid grid-cols-4 gap-4">
+          {catalog.map((item, index) => (
+            <CatalogItem
+              item={item}
+              key={index}
+              isLiked={email ? likedStr.includes(item._id.toString()) : null}
+              isInBasket={basketArr.includes(item._id.toString())}
+            />
+          ))}
+        </div>
       </div>
     </main>
   );
