@@ -2,10 +2,8 @@ import { db } from "@/lib/MongoConnect";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { data: string; id: string } }
-) {
+export async function GET(request: Request, props: { params: Promise<{ data: string; id: string }> }) {
+  const params = await props.params;
   const collName = snakeToCamel(params.data);
 
   try {
@@ -19,10 +17,8 @@ export async function GET(
   return NextResponse.error();
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { data: string; id: string } }
-) {
+export async function PUT(request: Request, props: { params: Promise<{ data: string; id: string }> }) {
+  const params = await props.params;
   const collName = snakeToCamel(params.data);
   const collection = db.collection(collName);
 
@@ -42,10 +38,8 @@ export async function PUT(
   return NextResponse.error();
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { data: string; id: string } }
-) {
+export async function DELETE(request: Request, props: { params: Promise<{ data: string; id: string }> }) {
+  const params = await props.params;
   const collName = snakeToCamel(params.data);
   const collection = db.collection(collName);
 

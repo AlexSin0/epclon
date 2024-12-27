@@ -1,20 +1,16 @@
 import { db } from "@/lib/MongoConnect";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { data: string } }
-) {
+export async function GET(request: Request, props: { params: Promise<{ data: string }> }) {
+  const params = await props.params;
   const collName = snakeToCamel(params.data);
   const data = await db.collection(collName).find().toArray();
 
   return NextResponse.json(data);
 }
 
-export async function POST(
-  request: Request,
-  { params }: { params: { data: string } }
-) {
+export async function POST(request: Request, props: { params: Promise<{ data: string }> }) {
+  const params = await props.params;
   const collName = snakeToCamel(params.data);
   const collection = db.collection(collName);
 
