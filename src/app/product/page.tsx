@@ -6,11 +6,12 @@ import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import Image from "next/image";
 
-export default async function Product({
-  searchParams,
-}: {
-  searchParams: { id: string };
-}) {
+export default async function Product(
+  props0: {
+    searchParams: Promise<{ id: string }>;
+  }
+) {
+  const searchParams = await props0.searchParams;
   if (!searchParams || !searchParams.id) {
     return <p>Error. Item not found</p>;
   }
@@ -44,7 +45,7 @@ export default async function Product({
   const liked = email ? await GetUserLiked(email) : [];
   const likedStr = liked.map((x) => x.toString());
 
-  const basket = cookies().get("basket")?.value;
+  const basket = (await cookies()).get("basket")?.value;
   const basketArr: string[] = basket ? JSON.parse(basket) : [];
 
   return (

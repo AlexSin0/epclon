@@ -13,7 +13,7 @@ export default async function Cart() {
   const liked = email ? await GetUserLiked(email) : [];
   const likedStr = liked.map((x) => x.toString());
 
-  const basket = cookies().get("basket")?.value;
+  const basket = (await cookies()).get("basket")?.value;
   const basketArr: string[] = basket ? JSON.parse(basket) : [];
 
   const basketIds: ObjectId[] = [];

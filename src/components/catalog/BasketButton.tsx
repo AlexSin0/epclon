@@ -31,16 +31,16 @@ async function likeHandler(formData: FormData) {
 
   for (const [key, val] of formData.entries()) {
     if (val === IN_BASKET) {
-      const basket = JSON.parse(cookies().get("basket")?.value || "[]");
+      const basket = JSON.parse((await cookies()).get("basket")?.value || "[]");
       basket.push(key);
-      cookies().set("basket", JSON.stringify(basket));
+      (await cookies()).set("basket", JSON.stringify(basket));
       break;
     }
 
     if (val === NOT_IN_BUSKET) {
-      const basket = JSON.parse(cookies().get("basket")?.value || "[]");
+      const basket = JSON.parse((await cookies()).get("basket")?.value || "[]");
       basket.splice(basket.indexOf(key), 1);
-      cookies().set("basket", JSON.stringify(basket));
+      (await cookies()).set("basket", JSON.stringify(basket));
       break;
     }
   }
