@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.15",
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.2.2",
-    "mongodb": "^6.2.0",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.6",
     "next": "^14.2.22",
     "next-auth": "^4.24.4",
     "nodemailer": "^6.9.7",
@@ -25,6 +27,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
+    "drizzle-kit": "^0.31.5",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
     "postcss": "^8",

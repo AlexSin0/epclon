@@ -1,131 +1,144 @@
-import ShopItem, { ItemType } from "@/types/ShopItem";
-
-import { shopItemCollection, userCollection } from "@/lib/MongoConnect";
-import { WithId, Filter, Document, ObjectId } from "mongodb";
 import { cookies } from "next/headers";
+import { db, shopItems, shopUsers } from "@/lib/db";
+import { and, eq, gt, inArray, isNotNull, sql } from "drizzle-orm";
+import { ShopItem, ItemType } from "@/types/ShopItem";
+import ShopUser from "@/types/ShopUser";
+
+const propsExtract = (prop: string) =>
+  sql`json_extract(${shopItems.props}, ${"$." + prop})`;
+
+const searchParamsFilter = (searchParams: SearchParams) =>
+  Object.entries(searchParams).map(([k, v]) =>
+    Array.isArray(v) ? inArray(propsExtract(k), v) : eq(propsExtract(k), v)
+  );
+
+const onlyOne = async (query: Promise<any[]>) => (await query)[0];
+
+export function BasketGet() {
+  const basketCookies = cookies().get("basket")?.value;
+  return basketCookies ? (JSON.parse(basketCookies) as number[]) : [];
+}
+
+export function BasketSet(arr: number[]) {
+  return cookies().set("basket", JSON.stringify(arr));
+}
 
 export function GetFilterProps(filterName: string) {
-	return shopItemCollection.distinct(`props.${filterName}`);
+  return db
+    .selectDistinct({
+      value: propsExtract(filterName),
+    })
+    .from(shopItems)
+    .where(isNotNull(propsExtract(filterName)));
 }
 
 export function GetAllFilterProps(filterNames: string[]) {
-	return Promise.all(
-		filterNames.map((filterName) => GetFilterProps(filterName))
-	);
+  return Promise.all(
+    filterNames.map(async (filterName) =>
+      (await GetFilterProps(filterName)).map((x) => x.value as string)
+    )
+  );
 }
 
-export function GetCatalogFull(): Promise<WithId<ShopItem>[]> {
-	return shopItemCollection.find().toArray() as Promise<WithId<ShopItem>[]>;
+export function GetCatalogFull() {
+  return db.select().from(shopItems) as Promise<ShopItem[]>;
 }
 
 export type SearchParams = { [key: string]: string | string[] | undefined };
 
 export function GetCatalogFiltered(searchParams: SearchParams) {
-	const mongoFilter = ToMongoFilter(searchParams);
-
-	const query = shopItemCollection.find(mongoFilter);
-
-	return query.toArray() as Promise<WithId<ShopItem>[]>;
-}
-
-function ToMongoFilter(searchParams: SearchParams) {
-	const mongoFilter: Filter<Document> = {};
-
-	for (const key in searchParams) {
-		const val = searchParams[key];
-
-		if (Array.isArray(val)) {
-			mongoFilter[`props.${key}`] = { $in: val };
-		} else {
-			mongoFilter[`props.${key}`] = val;
-		}
-	}
-
-	return mongoFilter;
+  return db
+    .select()
+    .from(shopItems)
+    .where(and(...searchParamsFilter(searchParams))) as Promise<ShopItem[]>;
 }
 
 export function GetCatalogSearch(searchQuery: string) {
-	const query = shopItemCollection.aggregate([
-		{
-			$search: {
-				index: "searchIndex",
-				text: {
-					query: searchQuery,
-					path: {
-						wildcard: "*",
-					},
-				},
-			},
-		},
-	]);
-
-	return query.toArray() as Promise<WithId<ShopItem>[]>;
+  // TODO: Search
+  return GetCatalogFull();
 }
 
-export async function GetUserLiked(email: string): Promise<ObjectId[]> {
-	const user = await userCollection.findOne({
-		email: email,
-	});
-
-	return user?.liked ?? [];
+export async function GetUserLiked(email: string) {
+  const user = await GetUser(email);
+  return (user.liked ?? []) as number[];
 }
 
-export function GetCatalogById(liked: ObjectId[]) {
-	return shopItemCollection.find({ _id: { $in: liked } }).toArray() as Promise<
-		WithId<ShopItem>[]
-	>;
+export function GetCatalogById(ids: number[]) {
+  return db
+    .select()
+    .from(shopItems)
+    .where(inArray(shopItems.id, ids)) as Promise<ShopItem[]>;
 }
 
 export function GetCatalogType(type: ItemType) {
-	return shopItemCollection.find({ itemType: type }).toArray();
+  return db
+    .select()
+    .from(shopItems)
+    .where(eq(shopItems.itemType, type)) as Promise<ShopItem[]>;
 }
 
 export function GetCatalogTypeFiltered(
-	type: ItemType,
-	searchParams: SearchParams
+  type: ItemType,
+  searchParams: SearchParams
 ) {
-	const mongoFilter = ToMongoFilter(searchParams);
+  const filter = and(
+    eq(shopItems.itemType, type),
+    ...searchParamsFilter(searchParams)
+  );
 
-	mongoFilter["itemType"] = type;
-
-	const query = shopItemCollection.find(mongoFilter);
-
-	return query.toArray() as Promise<WithId<ShopItem>[]>;
+  return db.select().from(shopItems).where(filter) as Promise<ShopItem[]>;
 }
 
-export function GetShopItem(id: ObjectId) {
-	return shopItemCollection.findOne({ _id: id }) as Promise<WithId<ShopItem>>;
+export function GetShopItem(id: number) {
+  return onlyOne(
+    db.select().from(shopItems).where(eq(shopItems.id, id)).limit(1)
+  ) as Promise<ShopItem>;
 }
 
-export function GetBasketItemIds() {
-	const basket = cookies().get("basket")?.value;
-	const basketArr: string[] = basket ? JSON.parse(basket) : [];
-
-	const basketIds: ObjectId[] = [];
-	basketArr.forEach((item) => {
-		try {
-			basketIds.push(new ObjectId(item));
-		} catch {}
-	});
-
-	return basketIds;
-}
-
-export async function GetBasketItems() {
-	const basketIds = GetBasketItemIds();
-
-	const catalogRaw = await GetCatalogById(basketIds);
-	const catalog = catalogRaw.filter((item) => item.quantity >= 1);
-
-	return catalog;
+export function GetBasketItems() {
+  return db
+    .select()
+    .from(shopItems)
+    .where(
+      and(gt(shopItems.quantity, 0), inArray(shopItems.id, BasketGet()))
+    ) as Promise<ShopItem[]>;
 }
 
 export function BasketItemsDecrement() {
-	const basketIds = GetBasketItemIds();
-	cookies().delete("basket");
+  const basket = BasketGet();
+  cookies().delete("basket");
 
-	return shopItemCollection.updateMany(
-		{ _id: { $in: basketIds } },
-		{ $inc: { quantity: -1 } }
-	);
+  return db
+    .update(shopItems)
+    .set({ quantity: sql`${shopItems.quantity} - 1` })
+    .where(and(gt(shopItems.quantity, 0), inArray(shopItems.id, basket)));
+}
+
+export function LikedAdd(email: string, id: number) {
+  return db
+    .update(shopUsers)
+    .set({ liked: sql`json_insert(${shopUsers.liked},'$[#]',${id})` })
+    .where(eq(shopUsers.email, email));
+}
+
+export function LikedRemove(email: string, id: number) {
+  return db
+    .update(shopUsers)
+    .set({
+      liked: sql`json_remove(liked, (SELECT fullkey FROM json_each(liked) WHERE value = ${id}))`,
+    })
+    .where(eq(shopUsers.email, email));
+}
+
+export function GetUser(email: string) {
+  return onlyOne(
+    db.select().from(shopUsers).where(eq(shopUsers.email, email)).limit(1)
+  ) as Promise<ShopUser>;
+}
+
+export function UpdateProfile(
+  email: string,
+  set: { name?: string; bio?: string }
+) {
+  return db.update(shopUsers).set(set);
 }

@@ -1,49 +1,48 @@
-import { ObjectId } from "mongodb";
+import { BasketGet, BasketSet } from "@/lib/Catalog";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 
 const IN_BASKET = "To cart";
-const NOT_IN_BUSKET = "Out of cart";
+const NOT_IN_BASKET = "Out of cart";
 
 export default function BasketButton({
-	id,
-	isInBasket,
+  id,
+  isInBasket,
 }: {
-	id: ObjectId;
-	isInBasket: boolean;
+  id: number;
+  isInBasket: boolean;
 }) {
-	return (
-		<form className="flex-grow max-w-[300px]" action={basketHandler}>
-			<input
-				className={`rounded-lg border-sky-500 border-4 p-1 cursor-pointer w-full bg-sky-600 ${
-					isInBasket ? "" : "bg-opacity-10"
-				}`}
-				type="submit"
-				name={id.toString()}
-				value={isInBasket ? NOT_IN_BUSKET : IN_BASKET}
-			/>
-		</form>
-	);
+  return (
+    <form className="flex-grow max-w-[300px]" action={basketHandler}>
+      <input
+        className={`rounded-lg border-sky-500 border-4 p-1 cursor-pointer w-full bg-sky-600 ${
+          isInBasket ? "" : "bg-opacity-10"
+        }`}
+        type="submit"
+        name={id.toString()}
+        value={isInBasket ? NOT_IN_BASKET : IN_BASKET}
+      />
+    </form>
+  );
 }
 
 async function basketHandler(formData: FormData) {
-	"use server";
+  "use server";
 
-	for (const [key, val] of formData.entries()) {
-		if (val === IN_BASKET) {
-			const basket = JSON.parse(cookies().get("basket")?.value || "[]");
-			basket.push(key);
-			cookies().set("basket", JSON.stringify(basket));
-			break;
-		}
+  for (const [key, val] of formData.entries()) {
+    if (val === IN_BASKET) {
+      const basket = BasketGet();
+      basket.push(Number(key));
+      BasketSet(basket);
+      break;
+    }
 
-		if (val === NOT_IN_BUSKET) {
-			const basket = JSON.parse(cookies().get("basket")?.value || "[]");
-			basket.splice(basket.indexOf(key), 1);
-			cookies().set("basket", JSON.stringify(basket));
-			break;
-		}
-	}
+    if (val === NOT_IN_BASKET) {
+      const basket = BasketGet();
+      basket.splice(basket.indexOf(Number(key)), 1);
+      BasketSet(basket);
+      break;
+    }
+  }
 
-	revalidatePath("");
+  revalidatePath("");
 }

@@ -1,4 +1,4 @@
-import { userCollection } from "@/lib/MongoConnect";
+import { GetUser, UpdateProfile } from "@/lib/Catalog";
 import ShopUser from "@/types/ShopUser";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -15,9 +15,7 @@ export default async function Home() {
 
   const email = session.user.email;
 
-  const profile = await userCollection.findOne({
-    email: email,
-  });
+  const profile = await GetUser(email);
 
   if (!profile) {
     return <p>An error has occurred. Your profile was not found.</p>;
@@ -76,7 +74,7 @@ async function editProfileHandler(formData: FormData) {
     if (val) obj[key] = val;
   }
 
-  await userCollection.updateOne({ email: email }, { $set: obj });
+  await UpdateProfile(email, obj);
   revalidatePath("");
 }
 

@@ -1,5 +1,4 @@
-import { userCollection } from "@/lib/MongoConnect";
-import { ObjectId } from "mongodb";
+import { LikedAdd, LikedRemove } from "@/lib/Catalog";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -10,7 +9,7 @@ export default function LikeButton({
   id,
   isLiked,
 }: {
-  id: ObjectId;
+  id: number;
   isLiked: boolean;
 }) {
   return (
@@ -37,18 +36,12 @@ async function likeHandler(formData: FormData) {
 
   for (const [key, val] of formData.entries()) {
     if (val === LIKE) {
-      await userCollection.updateOne(
-        { email: email },
-        { $push: { liked: new ObjectId(key) } }
-      );
+      await LikedAdd(email, Number(key));
       break;
     }
 
     if (val === UNLIKE) {
-      await userCollection.updateOne(
-        { email: email },
-        { $pull: { liked: new ObjectId(key) } }
-      );
+      await LikedRemove(email, Number(key));
       break;
     }
   }
