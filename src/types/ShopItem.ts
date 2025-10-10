@@ -8,8 +8,9 @@ export type ItemType =
   | "HardDrive"
   | "PSU";
 
-export default class ShopItem {
+export class ShopItem {
   constructor(
+    public id: number,
     public name: string,
     public cost: number,
     public itemType: ItemType,
