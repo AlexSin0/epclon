@@ -1,6 +1,4 @@
 import { getServerSession } from "next-auth";
-import { cookies } from "next/headers";
-
 import ItemTypeButton from "@/components/catalog/ItemTypeButton";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import FilterGroup from "@/components/catalog/FilterGroup";
