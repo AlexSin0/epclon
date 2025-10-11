@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { db, shopItems, shopUsers } from "@/lib/db";
-import { and, eq, gt, inArray, isNotNull, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, isNotNull, like, or, sql } from "drizzle-orm";
 import { ShopItem, ItemType } from "@/types/ShopItem";
 import ShopUser from "@/types/ShopUser";
 
@@ -54,8 +54,18 @@ export function GetCatalogFiltered(searchParams: SearchParams) {
 }
 
 export function GetCatalogSearch(searchQuery: string) {
-  // TODO: Search
-  return GetCatalogFull();
+  const search = and(
+    ...searchQuery
+      .split(" ")
+      .map((word) =>
+        or(
+          like(shopItems.name, `%${word}%`),
+          like(shopItems.props, `%${word}%`)
+        )
+      )
+  );
+
+  return db.select().from(shopItems).where(search) as Promise<ShopItem[]>;
 }
 
 export async function GetUserLiked(email: string) {
