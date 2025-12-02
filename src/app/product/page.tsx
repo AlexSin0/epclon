@@ -1,27 +1,18 @@
 import BasketButton from "@/components/catalog/BasketButton";
 import LikeButton from "@/components/catalog/LikeButton";
-import { GetShopItem, GetUserLiked, PriceFormat } from "@/lib/Catalog";
-import { ObjectId } from "mongodb";
+import { BasketGet, GetShopItem, GetUserLiked } from "@/lib/Catalog";
 import { getServerSession } from "next-auth";
-import { cookies } from "next/headers";
 import Image from "next/image";
 
-export default async function Product({
-  searchParams,
-}: {
-  searchParams: { id: string };
+export default async function Product(props0: {
+  searchParams: Promise<{ id: string }>;
 }) {
+  const searchParams = await props0.searchParams;
   if (!searchParams || !searchParams.id) {
     return <p>Error. Item not found</p>;
   }
 
-  let itemId;
-  try {
-    itemId = new ObjectId(searchParams.id);
-  } catch (error) {
-    return <p>Error. Item not found</p>;
-  }
-
+  const itemId = Number(searchParams.id);
   const shopItem = await GetShopItem(itemId);
 
   let props = [];
@@ -40,12 +31,10 @@ export default async function Product({
 
   const session = await getServerSession();
   const email = session?.user?.email;
+  const isLogged = !!email;
 
   const liked = email ? await GetUserLiked(email) : [];
-  const likedStr = liked.map((x) => x.toString());
-
-  const basket = cookies().get("basket")?.value;
-  const basketArr: string[] = basket ? JSON.parse(basket) : [];
+  const basket = BasketGet();
 
   return (
     <main className="bg-slate-500 text-white max-h-[30vh]">
@@ -64,18 +53,23 @@ export default async function Product({
             <p className="pt-1">
               Price:
               <span className="underline pl-1">
-                {PriceFormat(shopItem.cost)}
+                {`${Number(shopItem.cost).toFixed(2)}₴`}
               </span>
             </p>
             <div className="flex gap-3 my-2">
-              <BasketButton
-                id={itemId}
-                isInBasket={basketArr.includes(itemId.toString())}
-              />
-              <LikeButton
-                id={itemId}
-                isLiked={likedStr.includes(itemId.toString())}
-              />
+              {isLogged ?? (
+                <LikeButton id={itemId} isLiked={liked.includes(itemId)} />
+              )}
+              {shopItem.quantity < 1 ? (
+                <p className="p-1 border-4 border-transparent text-center text-white max-w-[200px]:">
+                  Out of stock
+                </p>
+              ) : (
+                <BasketButton
+                  id={itemId}
+                  isInBasket={basket.includes(itemId)}
+                />
+              )}
             </div>
           </div>
           <div className="pt-5 max-h-[70%] overflow-auto w-full static">

@@ -1,5 +1,6 @@
-import { userCollection } from "@/lib/MongoConnect";
+import { db, shopUsers } from "@/lib/db";
 import ShopUser from "@/types/ShopUser";
+import { eq } from "drizzle-orm";
 import { User } from "next-auth";
 
 export default async function dbRegister(user: User) {
@@ -8,9 +9,12 @@ export default async function dbRegister(user: User) {
     return;
   }
 
-  const userDoc = await userCollection.findOne({ email: user.email });
+  const users = await db
+    .select()
+    .from(shopUsers)
+    .where(eq(shopUsers.email, user.email));
 
-  if (userDoc) {
+  if (users.length > 0) {
     console.log(`User ${user.email} already registered`);
     return;
   }
@@ -18,7 +22,7 @@ export default async function dbRegister(user: User) {
   const newUser = new ShopUser(user.email);
   if (user.name) newUser.name = user.name;
 
-  userCollection.insertOne(newUser);
+  await db.insert(shopUsers).values(newUser);
 
   console.log(`Registered user ${user.email} to DB`);
 }

@@ -1,29 +1,15 @@
 import Checkout from "@/components/payment/Checkout";
 import CatalogItem from "@/components/catalog/CatalogItem";
-import { GetCatalogById, GetUserLiked } from "@/lib/Catalog";
-import { Purchase } from "@/lib/Payment";
-import { ObjectId } from "mongodb";
+import { GetBasketItems, GetUserLiked } from "@/lib/Catalog";
 import { getServerSession } from "next-auth";
-import { cookies } from "next/headers";
 
 export default async function Cart() {
   const session = await getServerSession();
   const email = session?.user?.email;
 
   const liked = email ? await GetUserLiked(email) : [];
-  const likedStr = liked.map((x) => x.toString());
 
-  const basket = cookies().get("basket")?.value;
-  const basketArr: string[] = basket ? JSON.parse(basket) : [];
-
-  const basketIds: ObjectId[] = [];
-  basketArr.forEach((item) => {
-    try {
-      basketIds.push(new ObjectId(item));
-    } catch {}
-  });
-
-  const catalog = await GetCatalogById(basketIds);
+  const catalog = await GetBasketItems();
   const total = catalog.reduce((acc, item) => acc + Number(item.cost), 0);
 
   return (
@@ -45,17 +31,12 @@ export default async function Cart() {
               <CatalogItem
                 item={item}
                 key={index}
-                isLiked={email ? likedStr.includes(item._id.toString()) : null}
-                isInBasket={basketArr.includes(item._id.toString())}
+                isLiked={email ? liked.includes(item.id) : null}
+                isInBasket={true}
               />
             ))}
           </div>
-          <div
-            className="w-[30%]
-      text-white text-lg text-center
-      min-h-[10vh]
-      sticky top-[40vh]"
-          >
+          <div className="w-[30%] text-white text-lg text-center min-h-[10vh] sticky top-[40vh]">
             <Checkout amount={total} />
           </div>
         </>

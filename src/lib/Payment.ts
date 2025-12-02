@@ -1,22 +1,28 @@
 "use server";
 
-import { cookies } from "next/headers";
-
 import nodemailer from "nodemailer";
+import { BasketItemsDecrement } from "./Catalog";
+
+const GMAIL_EMAIL = process.env.GMAIL_EMAIL;
+const GMAIL_PW = process.env.GMAIL_PW;
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.GMAIL_EMAIL,
-    pass: process.env.GMAIL_PW,
+    user: GMAIL_EMAIL,
+    pass: GMAIL_PW,
   },
 });
 
 export async function Purchase(email: string) {
-  cookies().delete("basket");
   console.log("Successful purchase by " + email);
 
-  // TODO: Delete from DB
+  await BasketItemsDecrement();
+
+  if (!GMAIL_EMAIL || !GMAIL_PW) {
+    console.log("No email credentials detected. Email wasn't sent. ");
+    return;
+  }
 
   transporter.sendMail(
     {

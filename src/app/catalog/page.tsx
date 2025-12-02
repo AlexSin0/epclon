@@ -1,7 +1,5 @@
 import { getServerSession } from "next-auth";
-import { cookies } from "next/headers";
-
-import ItemTypeButton from "@/components/catalog/ItemTypeButtom";
+import ItemTypeButton from "@/components/catalog/ItemTypeButton";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import FilterGroup from "@/components/catalog/FilterGroup";
 import {
@@ -11,18 +9,18 @@ import {
   GetCatalogSearch,
   GetUserLiked,
   SearchParams,
+  BasketGet,
 } from "@/lib/Catalog";
 
-export default async function Catalog({
-  searchParams,
-}: {
-  searchParams: SearchParams;
+export default async function Catalog(props: {
+  searchParams: Promise<SearchParams>;
 }) {
+  const searchParams = await props.searchParams;
   const session = await getServerSession();
   const email = session?.user?.email;
 
   const liked = email ? await GetUserLiked(email) : [];
-  const likedStr = liked.map((x) => x.toString());
+  const basket = BasketGet();
 
   const likedParam = searchParams["liked"];
   const searchParam = searchParams["search"];
@@ -38,9 +36,6 @@ export default async function Catalog({
 
   const filterNames = ["color", "brand"];
   const filterProps = await GetAllFilterProps(filterNames);
-
-  const basket = cookies().get("basket")?.value;
-  const basketArr: string[] = basket ? JSON.parse(basket) : [];
 
   return (
     <main className="flex bg-zinc-400">
@@ -81,8 +76,8 @@ export default async function Catalog({
             <CatalogItem
               item={item}
               key={index}
-              isLiked={email ? likedStr.includes(item._id.toString()) : null}
-              isInBasket={basketArr.includes(item._id.toString())}
+              isLiked={email ? liked.includes(item.id) : null}
+              isInBasket={basket.includes(item.id)}
             />
           ))}
         </div>

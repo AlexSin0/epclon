@@ -1,102 +1,92 @@
 import { getServerSession } from "next-auth";
-import { cookies } from "next/headers";
-
-import ItemTypeButton from "@/components/catalog/ItemTypeButtom";
+import ItemTypeButton from "@/components/catalog/ItemTypeButton";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import FilterGroup from "@/components/catalog/FilterGroup";
 import {
   GetAllFilterProps,
   GetUserLiked,
   SearchParams,
-  GetCatalogType,
+  GetCatalogTypeFiltered,
+  BasketGet,
 } from "@/lib/Catalog";
 import { ItemType } from "@/types/ShopItem";
 
-export default async function Catalog({
-  searchParams,
-  params,
-}: {
-  searchParams: SearchParams;
-  params: { product: string };
+export default async function Catalog(props: {
+  searchParams: Promise<SearchParams>;
+  params: Promise<{ product: string }>;
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const session = await getServerSession();
   const email = session?.user?.email;
 
   const liked = email ? await GetUserLiked(email) : [];
-  const likedStr = liked.map((x) => x.toString());
 
   let catalog: any[] = [];
   let filterNames: string[] = [];
-  try {
-    let productType: ItemType | undefined;
 
-    switch (params.product) {
-      case "cpu":
-        productType = "CPU";
-        filterNames = [
-
-          "socket",
-          "threadCount",
-          "coreCount",
-          "clockspeed_GHz"
-        ];
-      break;
-      case "gpu":
-        productType = "GPU";
-        filterNames = [
-        "pcieVersion", 
-        "gpuCableType", 
-        "memoryCapacity_Gb",
-        "memoryStandard"
+  let productType: ItemType | undefined;
+  switch (params.product) {
+    case "cpu":
+      productType = "CPU";
+      filterNames = [
+        "socket",
+        // "threadCount",
+        // "coreCount",
+        // "clockspeed_GHz",
       ];
       break;
-      case "ram":
-        productType = "RAM";
-        filterNames = [
-        "ramStandard", 
-        "frequency_GHz", 
-        "ramCapacity_Gb", 
+    case "gpu":
+      productType = "GPU";
+      filterNames = [
+        "pcieVersion",
+        "gpuCableType",
+        // "memoryCapacity_Gb",
+        "memoryStandard",
       ];
       break;
-      case "hd":
-        productType = "Hard Drive";
-        filterNames = [
-        "memoryCapacity_Gb", 
-        "readSpeed_MBs", 
-        "writeSpeed_MBs", 
-        "type", 
-        "intrface"];
+    case "ram":
+      productType = "RAM";
+      filterNames = ["ramStandard", "frequency_GHz", "ramCapacity_Gb"];
       break;
-      case "mb":
-        productType = "Motherboard";
-        filterNames = [
-        "socket", 
-        "ramStandard", 
-        "pcieVersion", 
-        "ramSlotCount", 
-        "type"];
+    case "hd":
+      productType = "HardDrive";
+      filterNames = [
+        // "memoryCapacity_Gb",
+        // "readSpeed_MBs",
+        // "writeSpeed_MBs",
+        "type",
+        "intrface",
+      ];
       break;
-      case "psu":
-        productType = "PSU";
-        filterNames = [
-        "gpuCableType", 
-        "power_W", 
-        "efficiencyCertificate"];
+    case "mb":
+      productType = "Motherboard";
+      filterNames = [
+        "socket",
+        "ramStandard",
+        "pcieVersion",
+        // "ramSlotCount",
+        "type",
+      ];
       break;
-      default:
+    case "psu":
+      productType = "PSU";
+      filterNames = [
+        "gpuCableType",
+        // "power_W",
+        "efficiencyCertificate",
+      ];
       break;
-    }
-
-    filterNames.push(...["color", "brand"]);
-    catalog = await GetCatalogType(productType!);
-  } catch (err) {
-    console.log(err);
+    default:
+      break;
   }
 
-  const filterProps = await GetAllFilterProps(filterNames);
+  filterNames.push(...["color", "brand"]);
 
-  const basket = cookies().get("basket")?.value;
-  const basketArr: string[] = basket ? JSON.parse(basket) : [];
+  catalog = await GetCatalogTypeFiltered(productType!, searchParams);
+
+  const filterProps = await GetAllFilterProps(filterNames);
+  const basket = BasketGet();
 
   return (
     <main className="flex bg-zinc-400">
@@ -137,8 +127,8 @@ export default async function Catalog({
             <CatalogItem
               item={item}
               key={index}
-              isLiked={email ? likedStr.includes(item._id.toString()) : null}
-              isInBasket={basketArr.includes(item._id.toString())}
+              isLiked={email ? liked.includes(item.id) : null}
+              isInBasket={basket.includes(item.id)}
             />
           ))}
         </div>
