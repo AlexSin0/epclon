@@ -1,8 +1,8 @@
 import BasketButton from "@/components/catalog/BasketButton";
 import LikeButton from "@/components/catalog/LikeButton";
 import { BasketGet, GetShopItem, GetUserLiked } from "@/lib/Catalog";
-import { getServerSession } from "next-auth";
 import Image from "next/image";
+import { auth } from "@/lib/auth";
 
 export default async function Product(props0: {
   searchParams: Promise<{ id: string }>;
@@ -29,7 +29,7 @@ export default async function Product(props0: {
     );
   }
 
-  const session = await getServerSession();
+  const session = await auth();
   const email = session?.user?.email;
   const isLogged = !!email;
 

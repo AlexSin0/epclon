@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[url('/background.jpg')] bg-fixed text-black">
+    <main className="flex min-h-screen flex-col items-center justify-between p-20 bg-[url('/background.jpg')] bg-fixed text-black">
       <div className="">
         <div id="carouselExampleCaptions" className="relative">
           <div className="absolute bottom-0 left-0 right-0 z-[2] mx-[15%] mb-4 flex list-none justify-center p-0">
@@ -26,10 +26,12 @@ export default function Home() {
               data-te-carousel-active
               data-te-carousel-item
             >
-              <img
-                src="https://tecdn.b-cdn.net/img/Photos/Slides/img%20(15).jpg"
+              <Image
+                src="/background.jpg"
                 className="block w-full"
-                alt="..."
+                alt="placeholder"
+                width={400}
+                height={200}
               />
               <div className="absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
                 <h5 className="text-xl">First slide label</h5>
@@ -42,10 +44,12 @@ export default function Home() {
               className="relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none"
               data-te-carousel-item
             >
-              <img
-                src="https://tecdn.b-cdn.net/img/Photos/Slides/img%20(22).jpg"
+              <Image
+                src="/background.jpg"
                 className="block w-full"
-                alt="..."
+                alt="placeholder"
+                width={400}
+                height={200}
               />
               <div className="absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
                 <h5 className="text-xl">Second slide label</h5>
@@ -58,10 +62,12 @@ export default function Home() {
               className="relative float-left -mr-[100%] hidden w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none"
               data-te-carousel-item
             >
-              <img
-                src="https://tecdn.b-cdn.net/img/Photos/Slides/img%20(23).jpg"
+              <Image
+                src="/background.jpg"
                 className="block w-full"
-                alt="..."
+                alt="placeholder"
+                width={400}
+                height={200}
               />
               <div className="absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
                 <h5 className="text-xl">Third slide label</h5>
@@ -128,7 +134,7 @@ export default function Home() {
       <div className="grid grid-cols-3 gap-4 m-2 p-2">
         <Image
           src="/placeholder.jpg"
-          alt="placeholderjpg"
+          alt="placeholder"
           className=""
           width={400}
           height={400}
@@ -136,7 +142,7 @@ export default function Home() {
         />
         <Image
           src="/placeholder.jpg"
-          alt="placeholderjpg"
+          alt="placeholder"
           className=""
           width={400}
           height={400}
@@ -144,7 +150,7 @@ export default function Home() {
         />
         <Image
           src="/placeholder.jpg"
-          alt="placeholderjpg"
+          alt="placeholder"
           className=""
           width={400}
           height={400}
