@@ -1,15 +1,14 @@
-import { getServerSession } from "next-auth";
+import { auth } from "@/lib/auth";
 import ItemTypeButton from "@/components/catalog/ItemTypeButton";
 import CatalogItem from "@/components/catalog/CatalogItem";
-import FilterGroup from "@/components/catalog/FilterGroup";
 import {
-  GetAllFilterProps,
   GetUserLiked,
   SearchParams,
   GetCatalogTypeFiltered,
   BasketGet,
 } from "@/lib/Catalog";
 import { ItemType } from "@/types/ShopItem";
+import Filters from "@/components/catalog/Filters";
 
 export default async function Catalog(props: {
   searchParams: Promise<SearchParams>;
@@ -17,102 +16,35 @@ export default async function Catalog(props: {
 }) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const session = await getServerSession();
+  const session = await auth();
   const email = session?.user?.email;
 
   const liked = email ? await GetUserLiked(email) : [];
 
-  let catalog: any[] = [];
-  let filterNames: string[] = [];
-
   let productType: ItemType | undefined;
   switch (params.product) {
     case "cpu":
-      productType = "CPU";
-      filterNames = [
-        "socket",
-        // "threadCount",
-        // "coreCount",
-        // "clockspeed_GHz",
-      ];
-      break;
     case "gpu":
-      productType = "GPU";
-      filterNames = [
-        "pcieVersion",
-        "gpuCableType",
-        // "memoryCapacity_Gb",
-        "memoryStandard",
-      ];
-      break;
     case "ram":
-      productType = "RAM";
-      filterNames = ["ramStandard", "frequency_GHz", "ramCapacity_Gb"];
+    case "psu":
+      productType = params.product.toUpperCase() as ItemType;
       break;
     case "hd":
       productType = "HardDrive";
-      filterNames = [
-        // "memoryCapacity_Gb",
-        // "readSpeed_MBs",
-        // "writeSpeed_MBs",
-        "type",
-        "intrface",
-      ];
       break;
     case "mb":
       productType = "Motherboard";
-      filterNames = [
-        "socket",
-        "ramStandard",
-        "pcieVersion",
-        // "ramSlotCount",
-        "type",
-      ];
-      break;
-    case "psu":
-      productType = "PSU";
-      filterNames = [
-        "gpuCableType",
-        // "power_W",
-        "efficiencyCertificate",
-      ];
       break;
     default:
       break;
   }
 
-  filterNames.push(...["color", "brand"]);
-
-  catalog = await GetCatalogTypeFiltered(productType!, searchParams);
-
-  const filterProps = await GetAllFilterProps(filterNames);
+  const catalog = await GetCatalogTypeFiltered(productType!, searchParams);
   const basket = BasketGet();
 
   return (
     <main className="flex bg-zinc-400">
-      <div className="flex">
-        <div className="bg-slate-600 h-screen min-w-[300px] p-2 text-white text-lg sticky top-0">
-          <p className="text-2xl items-center justify-center flex">
-            Filtration
-          </p>
-          <hr />
-          <form className="max-h-[82vh] w-full overflow-auto">
-            <button
-              type="submit"
-              className="bg-[#21ad9a] p-2 my-4 rounded-xl w-full static"
-            >
-              Apply
-            </button>
-            {filterNames.map((prop, index) => (
-              <FilterGroup
-                name={prop}
-                filterSet={filterProps[index]}
-                key={index}
-              />
-            ))}
-          </form>
-        </div>
-      </div>
+      <Filters productType={params.product} />
       <div className="w-full">
         <div className="bg-slate-600 h-[40px] w-full sticky top-0 grid grid-cols-6">
           <ItemTypeButton productType="cpu">CPUs</ItemTypeButton>

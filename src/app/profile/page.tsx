@@ -1,13 +1,13 @@
-import { GetUser, UpdateProfile } from "@/lib/Catalog";
 import ShopUser from "@/types/ShopUser";
-import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
+import { GetUser, UpdateProfile } from "@/lib/Catalog";
+import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
 
 const keys: (keyof ShopUser)[] = ["name", "bio"];
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await auth();
 
   if (!session?.user?.email) {
     return <p>Page is not accessible. Please, authorize.</p>;
@@ -63,7 +63,7 @@ export default async function Home() {
 
 async function editProfileHandler(formData: FormData) {
   "use server";
-  const session = await getServerSession();
+  const session = await auth();
 
   if (!session?.user?.email) return;
   const email = session.user.email;

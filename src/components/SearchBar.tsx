@@ -3,7 +3,7 @@ export default function SearchBar() {
     <div className="flex justify-between">
       <form
         className="p-0.5 bg-white rounded-xl h-11 flex justify-between text-lg"
-        action="catalog"
+        action="/catalog"
       >
         <input
           className="rounded-xl p-2 text-black mr-0.5"
