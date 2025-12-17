@@ -1,6 +1,6 @@
 import { LikedAdd, LikedRemove } from "@/lib/Catalog";
-import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
 
 const LIKE = "❤️";
 const UNLIKE = "🤍";
@@ -29,7 +29,7 @@ export default function LikeButton({
 async function likeHandler(formData: FormData) {
   "use server";
 
-  const session = await getServerSession();
+  const session = await auth();
 
   if (!session?.user?.email) return;
   const email = session.user.email;

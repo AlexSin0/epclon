@@ -1,10 +1,10 @@
 import Checkout from "@/components/payment/Checkout";
 import CatalogItem from "@/components/catalog/CatalogItem";
 import { GetBasketItems, GetUserLiked } from "@/lib/Catalog";
-import { getServerSession } from "next-auth";
+import { auth } from "@/lib/auth";
 
 export default async function Cart() {
-  const session = await getServerSession();
+  const session = await auth();
   const email = session?.user?.email;
 
   const liked = email ? await GetUserLiked(email) : [];
